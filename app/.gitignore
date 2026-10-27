@@ -1,0 +1,11 @@
+.env
+var/
+samples/
+server/.venv/
+server/**/__pycache__/
+server/*.egg-info/
+server/.pytest_cache/
+server/.ruff_cache/
+web/node_modules/
+web/dist/
+web/tsconfig.tsbuildinfo

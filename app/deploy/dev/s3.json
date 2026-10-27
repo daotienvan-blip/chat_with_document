@@ -1,0 +1,9 @@
+{
+  "identities": [
+    {
+      "name": "cwd",
+      "credentials": [{ "accessKey": "cwd", "secretKey": "cwd-dev-secret" }],
+      "actions": ["Admin", "Read", "Write", "List", "Tagging"]
+    }
+  ]
+}

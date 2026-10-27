@@ -1,0 +1,515 @@
+openapi: 3.0.3
+info:
+  title: Chat với tài liệu — API
+  version: 1.0.0-draft
+  description: |
+    Hợp đồng API của MVP "Chat với tài liệu" (13 use case: UC07–UC12, UC14–UC19, UC21).
+    Tài liệu thiết kế: `API_Design.md` (cùng thư mục). Khi hai nơi mâu thuẫn, tệp này là nguồn chuẩn cho hình dạng
+    yêu cầu/phản hồi; `API_Design.md` là nguồn chuẩn cho lý do thiết kế.
+
+    **Không có xác thực** (CON-005): API chỉ được triển khai trong mạng nội bộ/VPN. Không có CORS (cùng gốc).
+    Lỗi dùng `application/problem+json` (RFC 9457, thay thế RFC 7807).
+  x-status: Draft — chưa có bản triển khai nào kiểm chứng hợp đồng này
+servers:
+  - url: /api/v1
+    description: API nghiệp vụ (cùng gốc với giao diện web)
+security: []
+tags:
+  - name: config
+    description: Cấu hình lúc chạy cho giao diện
+  - name: documents
+    description: Quản lý tài liệu (UC07–UC12, UC17)
+  - name: questions
+    description: Hỏi đáp có trích nguồn (UC14–UC19, UC21)
+  - name: ops
+    description: Hạ tầng; ở gốc, không nằm dưới /api/v1
+
+paths:
+  /config:
+    get:
+      tags: [config]
+      operationId: getConfig
+      summary: Lấy giới hạn và tham số giao diện
+      description: Giá trị `null` nghĩa là chưa cấu hình (chờ OQ-009, OQ-P06, OQ-011). Máy chủ vẫn kiểm tra khi nhận yêu cầu.
+      responses:
+        '200':
+          description: Cấu hình hiện hành
+          headers:
+            X-Request-Id: { $ref: '#/components/headers/RequestId' }
+            Cache-Control:
+              schema: { type: string, example: 'no-store' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Config' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /documents:
+    get:
+      tags: [documents]
+      operationId: listDocuments
+      summary: Xem danh sách tài liệu và trạng thái (UC11)
+      description: |
+        Trả mọi tài liệu chưa bị xóa, mới nhất trước. Không phân trang trong v1 (giả định ≤ 200 tài liệu, xem API_Design §3.4).
+        Giao diện gọi lại định kỳ (`pollIntervalMs`) khi còn tài liệu `processing`.
+      responses:
+        '200':
+          description: Danh sách tài liệu
+          headers:
+            X-Request-Id: { $ref: '#/components/headers/RequestId' }
+            Cache-Control:
+              schema: { type: string, example: 'no-store' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DocumentList' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    post:
+      tags: [documents]
+      operationId: uploadDocument
+      summary: Tải một tệp PDF lên (UC07, UC08)
+      description: |
+        Kiểm tra đồng bộ (UC08): kích thước, đuôi `.pdf`, chữ ký `%PDF-` ở 5 byte đầu. Không tin `Content-Type` của phần `file`.
+        Hợp lệ → lưu tệp, tạo bản ghi `processing` và việc xử lý nền, trả `202`. Việc xử lý (UC09) hoàn tất sau đó;
+        lỗi nội dung (hỏng, có mật khẩu, không có văn bản) chỉ biết sau và hiện ở `failureReason` (UC10).
+        Tệp bị từ chối ở bước kiểm tra **không** tạo bản ghi.
+        Không hỗ trợ `Idempotency-Key` trong v1: gửi lại sau mất kết nối có thể tạo tài liệu trùng (EC-12, OQ-014).
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Tệp PDF. Kích thước tối đa theo `Config.maxFileSizeMb`.
+            encoding:
+              file:
+                contentType: application/pdf
+      responses:
+        '202':
+          description: Đã nhận; đang xử lý
+          headers:
+            X-Request-Id: { $ref: '#/components/headers/RequestId' }
+            Location:
+              description: URL của tài liệu vừa tạo
+              schema: { type: string, example: '/api/v1/documents/7b0c1f2e-3a4b-4c5d-8e9f-0a1b2c3d4e5f' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Document' }
+        '400':
+          description: Sai định dạng hoặc yêu cầu không hợp lệ (`UNSUPPORTED_TYPE`, `INVALID_REQUEST`)
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              examples:
+                notPdf:
+                  value:
+                    type: 'urn:cwd:problem:unsupported-type'
+                    title: Chỉ hỗ trợ tệp PDF
+                    status: 400
+                    detail: Chỉ hỗ trợ tệp PDF.
+                    code: UNSUPPORTED_TYPE
+                    requestId: 3f1c9a52
+        '413':
+          description: Tệp lớn hơn giới hạn (`FILE_TOO_LARGE`)
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+              examples:
+                tooLarge:
+                  value:
+                    type: 'urn:cwd:problem:file-too-large'
+                    title: Tệp quá lớn
+                    status: 413
+                    detail: Tệp lớn hơn giới hạn 50 MB.
+                    code: FILE_TOO_LARGE
+                    limit: 50
+                    requestId: 3f1c9a53
+        '429': { $ref: '#/components/responses/RateLimited' }
+        '500': { $ref: '#/components/responses/InternalError' }
+        '503':
+          description: Hệ thống bận (`SYSTEM_BUSY`) hoặc chưa lưu được tệp (`STORAGE_UNAVAILABLE`). Tài liệu đã tải không mất.
+          headers:
+            Retry-After: { $ref: '#/components/headers/RetryAfter' }
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+
+  /documents/{id}:
+    parameters:
+      - $ref: '#/components/parameters/DocumentId'
+    get:
+      tags: [documents]
+      operationId: getDocument
+      summary: Xem một tài liệu (trạng thái xử lý — UC09, UC10)
+      responses:
+        '200':
+          description: Tài liệu
+          headers:
+            X-Request-Id: { $ref: '#/components/headers/RequestId' }
+            Cache-Control:
+              schema: { type: string, example: 'no-store' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Document' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    delete:
+      tags: [documents]
+      operationId: deleteDocument
+      summary: Xóa tài liệu (UC12)
+      description: |
+        Xóa mềm: tài liệu bị loại khỏi danh sách và khỏi truy xuất ngay; xóa vật lý (đoạn, bản ghi, tệp gốc) sau khoảng 1 giờ.
+        Xóa lại tài liệu đã xóa mềm vẫn trả `204`. Sau khi xóa vật lý, `id` không còn → `404`; giao diện coi `404` là "đã xóa".
+        Giao diện phải hỏi xác nhận trước khi gọi.
+      responses:
+        '204':
+          description: Đã xóa (hoặc đã xóa từ trước và chưa bị xóa vật lý)
+          headers:
+            X-Request-Id: { $ref: '#/components/headers/RequestId' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /documents/{id}/file:
+    parameters:
+      - $ref: '#/components/parameters/DocumentId'
+    get:
+      tags: [documents]
+      operationId: getDocumentFile
+      summary: Mở tệp PDF gốc để đối chiếu nguồn (UC17)
+      description: |
+        Trả PDF để trình duyệt hiển thị (`inline`). Giao diện mở URL này với fragment `#page=N` để tới đúng trang; fragment không gửi lên máy chủ.
+        Hỗ trợ `Range`. Chỉ phát tài liệu chưa bị xóa (kể cả `processing`/`failed` — tệp đã lưu); đã xóa → `404` (EC-16).
+      parameters:
+        - name: Range
+          in: header
+          required: false
+          schema: { type: string, example: 'bytes=0-1048575' }
+        - name: If-None-Match
+          in: header
+          required: false
+          schema: { type: string }
+      responses:
+        '200':
+          description: Toàn bộ tệp
+          headers:
+            X-Request-Id: { $ref: '#/components/headers/RequestId' }
+            Content-Disposition:
+              schema: { type: string, example: 'inline; filename="hop-dong-A.pdf"' }
+            X-Content-Type-Options:
+              schema: { type: string, example: nosniff }
+            Cache-Control:
+              schema: { type: string, example: 'private, max-age=0, must-revalidate' }
+            ETag:
+              schema: { type: string, example: '"<content_sha256>"' }
+            Accept-Ranges:
+              schema: { type: string, example: bytes }
+          content:
+            application/pdf:
+              schema: { type: string, format: binary }
+        '206':
+          description: Một phần tệp (theo `Range`)
+          content:
+            application/pdf:
+              schema: { type: string, format: binary }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '304':
+          description: Không đổi (`If-None-Match` khớp `ETag`); không có thân
+          headers:
+            ETag:
+              schema: { type: string }
+        '416':
+          description: Phạm vi `Range` không hợp lệ
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+        '500': { $ref: '#/components/responses/InternalError' }
+        '503':
+          description: Chưa đọc được tệp (`STORAGE_UNAVAILABLE`)
+          headers:
+            Retry-After: { $ref: '#/components/headers/RetryAfter' }
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+
+  /questions:
+    post:
+      tags: [questions]
+      operationId: askQuestion
+      summary: Đặt câu hỏi và nhận câu trả lời có nguồn (UC14, UC15, UC16, UC18, UC19, UC21)
+      description: |
+        Mỗi yêu cầu độc lập: máy chủ không lưu câu hỏi, câu trả lời hay ngữ cảnh (không hỏi tiếp nối). Giao diện giữ cuộc trao đổi trong `sessionStorage`.
+        Truy xuất trên **mọi tài liệu `ready` và chưa xóa**. Có ba kết quả hợp lệ (đều HTTP 200): `answered`, `partial`, `not_found`.
+        "Không tìm thấy" là kết quả nghiệp vụ, **không phải lỗi**.
+        Bất biến (kiểm tra bằng kiểm thử hợp đồng): `answered`/`partial` ⇒ `sources` ≥ 1; `not_found` ⇒ `sources` = [] và `answer` là thông báo chuẩn;
+        mọi mục của `sources` lấy từ siêu dữ liệu đoạn, không từ văn bản do LLM viết.
+        Không có tác dụng phụ trạng thái nên người dùng gửi lại được; client không nên tự động thử lại không giới hạn vì mỗi lần tốn chi phí AI.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/QuestionRequest' }
+            example:
+              question: Điều khoản thanh toán là gì?
+      responses:
+        '200':
+          description: Kết quả hỏi đáp
+          headers:
+            X-Request-Id: { $ref: '#/components/headers/RequestId' }
+            Cache-Control:
+              schema: { type: string, example: 'no-store' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Answer' }
+              examples:
+                answered:
+                  summary: Có căn cứ
+                  value:
+                    status: answered
+                    answer: Thanh toán trong vòng … ngày kể từ …
+                    sources:
+                      - { documentId: 7b0c1f2e-3a4b-4c5d-8e9f-0a1b2c3d4e5f, documentName: hop-dong-A.pdf, pages: [4, 5] }
+                partial:
+                  summary: Một phần
+                  value:
+                    status: partial
+                    answer: Theo hợp đồng A, … Phần về phí phạt chậm thanh toán không tìm thấy trong các tài liệu đã tải.
+                    sources:
+                      - { documentId: 7b0c1f2e-3a4b-4c5d-8e9f-0a1b2c3d4e5f, documentName: hop-dong-A.pdf, pages: [4] }
+                notFound:
+                  summary: Không tìm thấy
+                  value:
+                    status: not_found
+                    answer: Không tìm thấy thông tin trong các tài liệu đã tải.
+                    sources: []
+        '400':
+          description: Câu hỏi rỗng hoặc quá dài (`EMPTY_QUESTION`, `QUESTION_TOO_LONG`, `INVALID_REQUEST`)
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+        '500': { $ref: '#/components/responses/InternalError' }
+        '502':
+          description: Dịch vụ AI không dùng được (`AI_UNAVAILABLE`)
+          headers:
+            Retry-After: { $ref: '#/components/headers/RetryAfter' }
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '503':
+          description: Hệ thống bận (`SYSTEM_BUSY`)
+          headers:
+            Retry-After: { $ref: '#/components/headers/RetryAfter' }
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '504':
+          description: Hết thời gian chờ dịch vụ AI (`AI_TIMEOUT`)
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+
+  /healthz:
+    get:
+      tags: [ops]
+      operationId: healthz
+      summary: Tiến trình còn sống (liveness)
+      servers:
+        - url: /
+      responses:
+        '200':
+          description: Còn sống
+          content:
+            text/plain:
+              schema: { type: string, example: ok }
+  /readyz:
+    get:
+      tags: [ops]
+      operationId: readyz
+      summary: Sẵn sàng nhận yêu cầu (CSDL, hàng đợi, object storage)
+      servers:
+        - url: /
+      responses:
+        '200':
+          description: Sẵn sàng
+          content:
+            text/plain:
+              schema: { type: string, example: ok }
+        '503':
+          description: Chưa sẵn sàng
+          content:
+            text/plain:
+              schema: { type: string, example: 'not ready' }
+  /metrics:
+    get:
+      tags: [ops]
+      operationId: metrics
+      summary: Số đo vận hành định dạng Prometheus (chỉ mở cho mạng hạ tầng)
+      servers:
+        - url: /
+      responses:
+        '200':
+          description: Số đo
+          content:
+            text/plain:
+              schema: { type: string }
+
+components:
+  parameters:
+    DocumentId:
+      name: id
+      in: path
+      required: true
+      description: Mã tài liệu
+      schema: { type: string, format: uuid }
+  headers:
+    RequestId:
+      description: Mã truy vết của yêu cầu; proxy luôn sinh và ghi đè giá trị client gửi. Có trong mọi phản hồi.
+      schema: { type: string, example: 3f1c9a52 }
+    RetryAfter:
+      description: Số giây nên đợi trước khi thử lại (RFC 9110)
+      schema: { type: integer, minimum: 0, example: 5 }
+  responses:
+    NotFound:
+      description: Tài liệu không tồn tại hoặc đã bị xóa (`NOT_FOUND`)
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    RateLimited:
+      description: Vượt giới hạn tốc độ theo địa chỉ nguồn (`RATE_LIMITED`)
+      headers:
+        Retry-After: { $ref: '#/components/headers/RetryAfter' }
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    InternalError:
+      description: Lỗi không lường trước (`INTERNAL_ERROR`); chi tiết kỹ thuật không lộ ra ngoài
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+  schemas:
+    Config:
+      type: object
+      required: [maxFileSizeMb, maxQuestionLength, language, pollIntervalMs]
+      properties:
+        maxFileSizeMb:
+          type: integer
+          nullable: true
+          minimum: 1
+          description: Chưa cấu hình = null [TBD OQ-009]
+        maxQuestionLength:
+          type: integer
+          nullable: true
+          minimum: 1
+          description: Số ký tự tối đa của câu hỏi; null = chưa cấu hình [TBD OQ-P06]
+        language:
+          type: string
+          nullable: true
+          description: Ngôn ngữ tài liệu/câu hỏi (ví dụ `vi`); null = chưa chốt [TBD OQ-011]
+        pollIntervalMs:
+          type: integer
+          minimum: 500
+          example: 2000
+    DocumentStatus:
+      type: string
+      enum: [processing, ready, failed]
+    FailureReason:
+      type: string
+      nullable: true
+      enum: [FILE_CORRUPT, FILE_ENCRYPTED, NO_EXTRACTABLE_TEXT, PROCESSING_ERROR, null]
+      description: Khác null khi và chỉ khi `status = failed`
+    Document:
+      type: object
+      required: [id, name, sizeBytes, pageCount, status, failureReason, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string, maxLength: 255, example: hop-dong-A.pdf }
+        sizeBytes: { type: integer, format: int64, minimum: 1 }
+        pageCount:
+          type: integer
+          nullable: true
+          minimum: 1
+          description: null cho tới khi trích văn bản xong
+        status: { $ref: '#/components/schemas/DocumentStatus' }
+        failureReason: { $ref: '#/components/schemas/FailureReason' }
+        createdAt: { type: string, format: date-time }
+    DocumentList:
+      type: object
+      required: [items, total]
+      properties:
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/Document' }
+        total: { type: integer, minimum: 0 }
+    QuestionRequest:
+      type: object
+      required: [question]
+      additionalProperties: false
+      properties:
+        question:
+          type: string
+          minLength: 1
+          description: Sau khi cắt khoảng trắng đầu/cuối phải còn ≥ 1 ký tự và ≤ `Config.maxQuestionLength`.
+    AnswerStatus:
+      type: string
+      enum: [answered, partial, not_found]
+    Source:
+      type: object
+      required: [documentId, documentName, pages]
+      properties:
+        documentId: { type: string, format: uuid }
+        documentName: { type: string }
+        pages:
+          type: array
+          description: Số trang (từ 1), tăng dần, đã gộp; rỗng chỉ khi đoạn không có biên trang.
+          items: { type: integer, minimum: 1 }
+    Answer:
+      type: object
+      required: [status, answer, sources]
+      properties:
+        status: { $ref: '#/components/schemas/AnswerStatus' }
+        answer: { type: string }
+        sources:
+          type: array
+          items: { $ref: '#/components/schemas/Source' }
+    ProblemCode:
+      type: string
+      enum:
+        - INVALID_REQUEST
+        - UNSUPPORTED_TYPE
+        - FILE_TOO_LARGE
+        - EMPTY_QUESTION
+        - QUESTION_TOO_LONG
+        - NOT_FOUND
+        - RATE_LIMITED
+        - SYSTEM_BUSY
+        - STORAGE_UNAVAILABLE
+        - AI_UNAVAILABLE
+        - AI_TIMEOUT
+        - INTERNAL_ERROR
+    Problem:
+      type: object
+      description: RFC 9457 Problem Details. Giao diện quyết định hành vi theo `code`, hiển thị `detail`.
+      required: [type, title, status, code, requestId]
+      properties:
+        type:
+          type: string
+          format: uri
+          example: 'urn:cwd:problem:file-too-large'
+        title: { type: string }
+        status: { type: integer, minimum: 400, maximum: 599 }
+        detail:
+          type: string
+          description: Thông báo tiếng Việt có thể hiển thị cho người dùng; không chứa thông tin kỹ thuật nội bộ.
+        code: { $ref: '#/components/schemas/ProblemCode' }
+        limit:
+          type: integer
+          description: Giá trị giới hạn liên quan (MB cho FILE_TOO_LARGE, ký tự cho QUESTION_TOO_LONG)
+        requestId: { type: string }

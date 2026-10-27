@@ -1,0 +1,11 @@
+{
+  "Rules": [
+    {
+      "ID": "xoa-phien-ban-cu-7-ngay",
+      "Status": "Enabled",
+      "Filter": { "Prefix": "documents/" },
+      "NoncurrentVersionExpiration": { "NoncurrentDays": 7 },
+      "Expiration": { "ExpiredObjectDeleteMarker": true }
+    }
+  ]
+}

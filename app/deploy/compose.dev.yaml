@@ -1,0 +1,32 @@
+# S0-02 — môi trường dev bằng Docker (Colima). Cổng host mặc định 5433/9000 để không đụng PostgreSQL Homebrew (5432).
+# Object storage: SeaweedFS (S3-compatible) thay MinIO — MinIO đã ngừng phát hành ảnh Docker công khai.
+name: cwd-dev
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    environment: { POSTGRES_USER: cwd, POSTGRES_PASSWORD: cwd, POSTGRES_DB: cwd }
+    command: ["postgres", "-c", "shared_buffers=1GB", "-c", "maintenance_work_mem=256MB"]
+    ports: ["${CWD_PG_PORT:-5433}:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data", "./dev/init-test-db.sql:/docker-entrypoint-initdb.d/10-test.sql:ro"]
+    healthcheck: { test: ["CMD", "pg_isready", "-U", "cwd"], interval: 5s, retries: 20 }
+  s3:
+    image: chrislusf/seaweedfs:4.50
+    command: ["server", "-dir=/data", "-ip.bind=0.0.0.0", "-s3", "-s3.port=8333", "-s3.config=/etc/seaweedfs/s3.json"]
+    ports: ["${CWD_S3_PORT:-9000}:8333"]
+    volumes: ["s3data:/data", "./dev/s3.json:/etc/seaweedfs/s3.json:ro"]
+    healthcheck: { test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8333/status"], interval: 5s, retries: 30 }
+  s3-init:
+    image: amazon/aws-cli:2.38.6
+    depends_on: { s3: { condition: service_healthy } }
+    environment: { AWS_ACCESS_KEY_ID: cwd, AWS_SECRET_ACCESS_KEY: cwd-dev-secret, AWS_DEFAULT_REGION: us-east-1 }
+    volumes: ["./dev/s3-lifecycle.json:/init/lifecycle.json:ro"]
+    entrypoint: ["/bin/sh", "-c"]
+    # versioning = sao lưu PDF gốc (Database_Design §5.2); lifecycle giới hạn bản đã xóa còn lại ≤ 7 ngày (OQ-D01)
+    command:
+      - >-
+        set -e; S3="aws --endpoint-url http://s3:8333 s3api";
+        $$S3 head-bucket --bucket cwd-documents 2>/dev/null || $$S3 create-bucket --bucket cwd-documents;
+        $$S3 put-bucket-versioning --bucket cwd-documents --versioning-configuration Status=Enabled;
+        $$S3 put-bucket-lifecycle-configuration --bucket cwd-documents --lifecycle-configuration file:///init/lifecycle.json;
+        echo "bucket cwd-documents: versioning + lifecycle 7 ngày"
+volumes: { pgdata: {}, s3data: {} }

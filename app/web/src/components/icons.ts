@@ -1,0 +1,20 @@
+// Biểu tượng từ html_design. Biểu tượng luôn đi kèm chữ hoặc aria-label.
+export const ICONS: Record<string, string> = {
+  "file": '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>',
+  "check": '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/>',
+  "spinner": '<path d="M12 3a9 9 0 1 0 9 9"/>',
+  "x": '<circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/>',
+  "trash": '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  "upload": '<path d="M12 16V4M7 9l5-5 5 5M4 20h16"/>',
+  "info": '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/>',
+  "warn": '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.01"/>',
+  "none": '<circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5M8 11h6"/>',
+  "ext": '<path d="M14 4h6v6M20 4l-9 9M18 14v5H5V6h5"/>',
+  "send": '<path d="M3 11l18-8-8 18-2-8z"/>',
+  "refresh": '<path d="M20 11a8 8 0 1 0-2 6M20 4v7h-7"/>',
+  "half": '<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" class="f"/>',
+  "chat": '<path d="M4 5h16v11H9l-5 4z"/>',
+  "plus": '<path d="M12 5v14M5 12h14"/>',
+  "offline": '<path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0M12 19v.01M3 3l18 18"/>',
+  "doc": '<path d="M7 3h8l4 4v14H7z"/><path d="M10 12h6M10 16h6"/>',
+};

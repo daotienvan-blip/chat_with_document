@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCR-01 · Màn hình chính — trạng thái trống — Chat với tài liệu</title>
+<style>
+:root{
+  --bg:#f4f6f9; --surface:#ffffff; --text:#17202e; --muted:#4b5668;
+  --border:#cdd5df; --border-strong:#758195;
+  --primary:#1d5bb8; --primary-hover:#174a97; --on-primary:#ffffff;
+  --succ-fg:#145c34; --succ-bg:#e5f4ec;
+  --warn-fg:#6b4200; --warn-bg:#fff2d1;
+  --dang-fg:#9b1c1c; --dang-bg:#fdeaea; --dang-solid:#b42318;
+  --info-fg:#0d4373; --info-bg:#e6f0fa; --neutral-bg:#eef1f5;
+  --focus:#0b57d0;
+  --r:8px; --r-sm:6px; --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px;
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:1rem/1.5 var(--font);-webkit-font-smoothing:antialiased}
+h1,h2,h3,p{margin:0}
+ul{list-style:none;margin:0;padding:0}
+button,input,textarea{font:inherit;color:inherit}
+a{color:var(--primary)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:absolute;left:var(--s2);top:-48px;background:var(--surface);padding:var(--s2) var(--s3);border-radius:var(--r-sm);z-index:100}
+.skip:focus{top:var(--s2)}
+.ic{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ic--fill{fill:currentColor;stroke:none}
+.spin{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}*{scroll-behavior:auto!important;transition:none!important}}
+
+/* ---- thanh công cụ thiết kế (ngoài sản phẩm) ---- */
+.dtb{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s4);align-items:center;background:#17202e;color:#fff;padding:var(--s2) var(--s4);font-size:.875rem}
+.dtb a{color:#cfe1ff}
+.dtb strong{font-weight:600}
+.dtb label{margin-left:auto;display:flex;gap:var(--s2);align-items:center;cursor:pointer}
+.dtb .note{color:#d5dbe5}
+.anno{display:none;background:#fff3b0;color:#4a3b00;border:1px dashed #8a6d00;border-radius:4px;padding:1px 6px;font-size:.75rem;line-height:1.4;font-weight:600;vertical-align:middle;margin-left:var(--s2)}
+body.show-anno .anno{display:inline-block}
+
+/* ---- khung ứng dụng ---- */
+.app-header{background:var(--surface);border-bottom:1px solid var(--border);padding:var(--s3) var(--s4);display:flex;align-items:center;gap:var(--s3)}
+.logo{display:grid;place-items:center;width:36px;height:36px;border-radius:var(--r-sm);background:var(--primary);color:var(--on-primary)}
+.app-header h1{font-size:1.25rem;line-height:1.3}
+.tag{font-size:.8125rem;background:var(--neutral-bg);color:var(--muted);border-radius:999px;padding:2px 10px;font-weight:600}
+.notice{display:flex;gap:var(--s3);align-items:flex-start;background:var(--info-bg);color:var(--info-fg);padding:var(--s3) var(--s4);border-bottom:1px solid #b9d3ee;font-size:.9375rem}
+.notice .ic{margin-top:2px}
+.layout{display:grid;grid-template-columns:1fr;gap:var(--s4);padding:var(--s4);max-width:1440px;margin:0 auto}
+@media (min-width:1024px){.layout{grid-template-columns:380px minmax(0,1fr);align-items:start}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);display:flex;flex-direction:column;min-width:0}
+.panel__head{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);padding:var(--s3) var(--s4);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.panel__head h2{font-size:1.125rem;line-height:1.3}
+.panel__body{padding:var(--s4)}
+
+/* ---- nút ---- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:40px;padding:0 var(--s4);border-radius:var(--r-sm);border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font-weight:600;cursor:pointer;text-decoration:none}
+.btn:hover{background:var(--neutral-bg)}
+.btn--primary{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.btn--primary:hover{background:var(--primary-hover);border-color:var(--primary-hover)}
+.btn--danger{background:var(--dang-solid);border-color:var(--dang-solid);color:#fff}
+.btn--danger:hover{background:#912018;border-color:#912018}
+.btn--sm{min-height:32px;padding:0 var(--s3);font-size:.9375rem}
+.btn--ghost{border-color:transparent;background:transparent;color:var(--primary)}
+.btn--ghost:hover{background:var(--info-bg)}
+.btn[disabled],.btn[aria-disabled="true"]{opacity:.55;cursor:not-allowed}
+.icon-btn{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:var(--r-sm);border:1px solid transparent;background:transparent;color:var(--muted);cursor:pointer}
+.icon-btn:hover{background:var(--dang-bg);color:var(--dang-fg)}
+
+/* ---- tải lên ---- */
+.drop{border:2px dashed var(--border-strong);border-radius:var(--r);padding:var(--s4);text-align:center;background:var(--bg)}
+.drop p{color:var(--muted);font-size:.9375rem;margin-top:var(--s2)}
+.drop .btn{margin-top:var(--s2)}
+.drop--over{border-color:var(--primary);background:var(--info-bg)}
+
+/* ---- thông báo nội tuyến ---- */
+.alert{display:flex;gap:var(--s3);align-items:flex-start;border-radius:var(--r-sm);padding:var(--s3);font-size:.9375rem;border:1px solid transparent}
+.alert .ic{margin-top:2px}
+.alert__body{flex:1;min-width:0}
+.alert__title{font-weight:700}
+.alert__actions{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s2)}
+.alert--danger{background:var(--dang-bg);color:var(--dang-fg);border-color:#f1b8b8}
+.alert--warn{background:var(--warn-bg);color:var(--warn-fg);border-color:#e8c97a}
+.alert--info{background:var(--info-bg);color:var(--info-fg);border-color:#b9d3ee}
+.alert--success{background:var(--succ-bg);color:var(--succ-fg);border-color:#a9d7bc}
+.alert--neutral{background:var(--neutral-bg);color:var(--text);border-color:var(--border)}
+
+/* ---- danh sách tài liệu ---- */
+.doc-list{display:flex;flex-direction:column;gap:var(--s2);margin-top:var(--s4)}
+.doc{border:1px solid var(--border);border-radius:var(--r);padding:var(--s3);display:grid;grid-template-columns:auto 1fr auto;gap:var(--s1) var(--s3);align-items:center;background:var(--surface)}
+.doc__icon{color:var(--muted)}
+.doc__name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.doc__meta{grid-column:2;color:var(--muted);font-size:.875rem}
+.doc__status{grid-column:2;margin-top:var(--s1)}
+.doc__msg{grid-column:1 / -1;margin-top:var(--s2)}
+.doc__actions{grid-row:1;grid-column:3;display:flex;gap:var(--s1)}
+.doc--failed{border-color:#f1b8b8}
+.badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px 2px 8px;font-size:.875rem;font-weight:700;line-height:1.5}
+.badge .ic{width:16px;height:16px}
+.badge--ready{background:var(--succ-bg);color:var(--succ-fg)}
+.badge--proc{background:var(--info-bg);color:var(--info-fg)}
+.badge--fail{background:var(--dang-bg);color:var(--dang-fg)}
+.badge--wait{background:var(--neutral-bg);color:var(--text)}
+.bar{height:8px;border-radius:999px;background:var(--neutral-bg);overflow:hidden;margin-top:var(--s2);border:1px solid var(--border)}
+.bar>i{display:block;height:100%;background:var(--primary)}
+.empty{text-align:center;padding:var(--s5) var(--s4);color:var(--muted)}
+.empty .ic{width:40px;height:40px;color:var(--border-strong)}
+.empty h3{color:var(--text);font-size:1.0625rem;margin:var(--s2) 0 var(--s1)}
+
+/* ---- khung trao đổi ---- */
+.chat{min-height:420px}
+.log{display:flex;flex-direction:column;gap:var(--s4);padding:var(--s4);min-height:260px}
+@media (min-width:1024px){.chat .log{max-height:68vh;overflow:auto}}
+.turn{display:flex;flex-direction:column;gap:var(--s3)}
+.q{align-self:flex-end;max-width:min(88%,640px);background:var(--primary);color:var(--on-primary);padding:var(--s3) var(--s4);border-radius:var(--r) var(--r) 2px var(--r);white-space:pre-wrap;overflow-wrap:anywhere}
+.a{align-self:flex-start;width:min(100%,760px);background:var(--surface);border:1px solid var(--border);border-radius:var(--r);border-left-width:6px;padding:var(--s3) var(--s4)}
+.a--answered{border-left-color:var(--succ-fg)}
+.a--partial{border-left-color:var(--warn-fg)}
+.a--notfound{border-left-color:var(--muted);background:var(--neutral-bg)}
+.a--error{border-left-color:var(--dang-fg);background:var(--dang-bg)}
+.a__label{display:flex;align-items:center;gap:6px;font-weight:700;font-size:.9375rem;margin-bottom:var(--s2)}
+.a--answered .a__label{color:var(--succ-fg)}
+.a--partial .a__label{color:var(--warn-fg)}
+.a--notfound .a__label{color:var(--text)}
+.a--error .a__label{color:var(--dang-fg)}
+.a__text{overflow-wrap:anywhere}
+.missing{margin-top:var(--s3);background:var(--warn-bg);color:var(--warn-fg);border-radius:var(--r-sm);padding:var(--s2) var(--s3);font-size:.9375rem;display:flex;gap:var(--s2);align-items:flex-start}
+.missing .ic{margin-top:2px;width:18px;height:18px}
+.sources{margin-top:var(--s3);padding-top:var(--s3);border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center}
+.sources__label{font-weight:700;font-size:.875rem;color:var(--muted);margin-right:var(--s1)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border-strong);border-radius:999px;padding:4px 12px;font-size:.9375rem;background:var(--surface);color:var(--primary);text-decoration:none;font-weight:600;max-width:100%}
+.chip:hover{background:var(--info-bg)}
+.chip .ic{width:16px;height:16px}
+.chip{flex-wrap:wrap;overflow-wrap:anywhere}
+.chip--gone{color:var(--muted);border-style:dashed;font-weight:500;background:var(--neutral-bg);cursor:not-allowed}
+.hint{color:var(--muted);font-size:.9375rem;margin-top:var(--s2)}
+.typing{display:flex;align-items:center;gap:var(--s2);color:var(--muted)}
+.composer{border-top:1px solid var(--border);padding:var(--s4);background:var(--surface);border-radius:0 0 var(--r) var(--r)}
+.composer label{display:block;font-weight:700;margin-bottom:var(--s2)}
+.field{width:100%;min-height:72px;resize:vertical;padding:var(--s3);border:1px solid var(--border-strong);border-radius:var(--r-sm);background:var(--surface)}
+.field[disabled]{background:var(--neutral-bg);cursor:not-allowed}
+.field[aria-invalid="true"]{border-color:var(--dang-solid);border-width:2px}
+.composer__row{display:flex;gap:var(--s3);align-items:center;justify-content:space-between;margin-top:var(--s2);flex-wrap:wrap}
+.counter{color:var(--muted);font-size:.875rem}
+.counter--bad{color:var(--dang-fg);font-weight:700}
+.field-err{color:var(--dang-fg);font-size:.9375rem;margin-top:var(--s2);display:flex;gap:6px;align-items:flex-start}
+.field-err .ic{width:18px;height:18px;margin-top:2px}
+
+/* ---- hộp thoại ---- */
+.backdrop{position:fixed;inset:0;background:rgba(23,32,46,.6);display:grid;place-items:center;padding:var(--s4);z-index:50}
+.dialog{background:var(--surface);border-radius:var(--r);max-width:480px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,.35);overflow:hidden}
+.dialog__head{padding:var(--s4) var(--s5) 0;display:flex;gap:var(--s3);align-items:flex-start}
+.dialog__icon{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--dang-bg);color:var(--dang-fg);flex:none}
+.dialog h2{font-size:1.1875rem;line-height:1.35;overflow-wrap:anywhere}
+.dialog__body{padding:var(--s3) var(--s5) var(--s4) calc(var(--s5) + 40px + var(--s3));color:var(--muted)}
+.dialog__body p+p{margin-top:var(--s2)}
+.dialog__foot{display:flex;justify-content:flex-end;gap:var(--s3);padding:var(--s3) var(--s5) var(--s4);background:var(--bg);border-top:1px solid var(--border);flex-wrap:wrap}
+.dialog .alert{margin:0 var(--s5) var(--s3)}
+[hidden]{display:none!important}
+
+/* ---- ghi chú thiết kế ---- */
+.spec{max-width:1440px;margin:0 auto;padding:0 var(--s4) var(--s6)}
+.spec details{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--s3) var(--s4)}
+.spec summary{font-weight:700;cursor:pointer}
+.spec table{border-collapse:collapse;width:100%;margin-top:var(--s3);font-size:.9375rem}
+.spec th,.spec td{border:1px solid var(--border);padding:var(--s2) var(--s3);text-align:left;vertical-align:top}
+.spec th{background:var(--neutral-bg);width:22%}
+.spec .sample{color:var(--muted);font-size:.875rem;margin-top:var(--s3)}
+.spec code{background:var(--neutral-bg);border-radius:4px;padding:0 4px;font-size:.875em}
+
+/* ---- trang danh mục ---- */
+.wrap{max-width:1100px;margin:0 auto;padding:var(--s5) var(--s4)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--s4);margin-top:var(--s4)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--s4);display:flex;flex-direction:column;gap:var(--s2)}
+.card h3{font-size:1.0625rem}
+.card p{color:var(--muted);font-size:.9375rem}
+.card .meta{font-size:.875rem;color:var(--muted)}
+.wrap table{border-collapse:collapse;width:100%;margin-top:var(--s3);background:var(--surface);font-size:.9375rem}
+.wrap th,.wrap td{border:1px solid var(--border);padding:var(--s2) var(--s3);text-align:left;vertical-align:top}
+.wrap th{background:var(--neutral-bg)}
+.wrap h2{margin-top:var(--s6);font-size:1.25rem}
+.swatches{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s3)}
+.sw{border:1px solid var(--border);border-radius:var(--r-sm);padding:var(--s2) var(--s3);font-size:.8125rem;min-width:130px}
+.sw i{display:block;height:28px;border-radius:4px;margin-bottom:var(--s1);border:1px solid rgba(0,0,0,.15)}
+</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true" focusable="false">
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></symbol>
+<symbol id="i-spinner" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+<symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></symbol>
+<symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.01"/></symbol>
+<symbol id="i-none" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5M8 11h6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5H5V6h5"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-8z"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2 6M20 4v7h-7"/></symbol>
+<symbol id="i-half" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" class="f"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-offline" viewBox="0 0 24 24"><path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0M12 19v.01M3 3l18 18"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/><path d="M10 12h6M10 16h6"/></symbol>
+</svg>
+<div class="dtb" role="region" aria-label="Công cụ xem thiết kế">
+  <a href="index.html">&larr; Danh mục màn hình</a>
+  <strong>SCR-01 &middot; Màn hình chính — trạng thái trống</strong>
+  <span class="note">Bản thiết kế &mdash; không phải sản phẩm. Dữ liệu là minh họa.</span>
+  <label><input type="checkbox" id="anno-toggle"> Hiện ghi chú thiết kế</label>
+</div><a class="skip" href="#q">Bỏ qua tới khung hỏi đáp</a>
+<header class="app-header">
+  <span class="logo"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg></span>
+  <h1>Chat với tài liệu</h1>
+  <span class="tag">MVP</span>
+</header>
+<div class="notice" role="note">
+  <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-info"/></svg>
+  <p><strong>Lưu ý về dữ liệu:</strong> tài liệu được lưu tại <em>[vị trí lưu trữ &mdash; chờ OQ-005]</em> và <strong>mọi người dùng ứng dụng này đều xem được tất cả tài liệu</strong>. Chỉ tải tài liệu mà mọi người được phép xem. Luôn kiểm chứng nguồn trước khi dùng câu trả lời. <span class="anno">Help &amp;amp; Onboarding, RSK-P01, CON-005</span></p>
+</div>
+<main class="layout">
+  <section class="panel" aria-labelledby="h-docs">
+    <div class="panel__head"><h2 id="h-docs">Tài liệu <span class="anno">UC11 · US-004 · GET /documents</span></h2></div>
+    <div class="panel__body"><div class="drop" id="drop">
+    <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-upload"/></svg>
+    <p>Chỉ hỗ trợ tệp PDF có văn bản, tối đa <strong>{maxFileSizeMb} MB</strong> mỗi tệp. <span class="anno">GET /config -&gt; maxFileSizeMb [TBD OQ-009]</span></p>
+    <input type="file" id="file" accept="application/pdf,.pdf" class="sr-only" aria-describedby="file-help">
+    <button type="button" class="btn btn--primary" id="pick"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-plus"/></svg> Tải PDF lên <span class="anno">UC07 · US-001 · POST /documents</span></button>
+    <p id="file-help">Hoặc kéo thả tệp vào đây.</p>
+  </div>
+    <div class="empty">
+      <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-doc"/></svg>
+      <h3>Chưa có tài liệu nào</h3>
+      <p>Tải lên một hoặc nhiều tệp PDF để bắt đầu hỏi đáp. <span class="anno">EC-01 · US-006-AC2</span></p>
+    </div></div>
+  </section>
+  <section class="panel chat" aria-labelledby="h-chat"><div class="panel__head"><h2 id="h-chat">Cuộc trao đổi</h2>
+    <button type="button" class="btn btn--sm" id="new-chat" disabled><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-refresh"/></svg> Cuộc trao đổi mới <span class="anno">sessionStorage — không gọi API</span></button></div>
+  <div class="log" id="log" tabindex="0" aria-label="Nội dung cuộc trao đổi" role="log" aria-live="polite" aria-relevant="additions">
+    <div class="empty">
+      <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>
+      <h3>Hãy tải tài liệu trước</h3>
+      <p>Khung hỏi sẽ mở khi có ít nhất một tài liệu ở trạng thái <strong>Sẵn sàng</strong>.</p>
+    </div>
+  </div><form class="composer" onsubmit="return false" aria-label="Đặt câu hỏi">
+  <label for="q">Câu hỏi của bạn <span class="anno">UC14 · US-006 · POST /questions</span></label>
+  <textarea class="field" id="q" rows="3" placeholder="Hãy tải ít nhất một tài liệu trước khi đặt câu hỏi" disabled></textarea>
+  
+  <div class="composer__row">
+    <span class="counter" id="count" aria-live="off">0 / {giới hạn}</span>
+    <span style="display:flex;gap:var(--s2)"><button type="button" class="btn btn--primary" id="send" disabled><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-send"/></svg> Gửi</button></span>
+  </div>
+  <p class="hint">Nhấn Enter để gửi, Shift+Enter để xuống dòng. Mỗi câu hỏi được trả lời độc lập, không nhớ câu trước.</p>
+</form></section>
+</main><section class="spec" aria-label="Ghi chú thiết kế của màn hình">
+  <details open><summary>Ghi chú thiết kế</summary>
+  <table><tr><th scope="row">Mục đích</th><td>Trạng thái trống lần đầu: hướng dẫn tải PDF, khóa khung hỏi, nêu rõ lưu ý về dữ liệu.</td></tr><tr><th scope="row">Use case / story</th><td>UC07, UC08 (điểm vào), UC11 &middot; US-001, US-004, US-006-AC2 &middot; EC-01</td></tr><tr><th scope="row">API khi mở trang</th><td><code>GET /config</code> (giới hạn) và <code>GET /documents</code> &rarr; <code>items: []</code></td></tr><tr><th scope="row">Hành vi</th><td>Ô hỏi và nút Gửi bị vô hiệu hóa (<code>disabled</code>); placeholder giải thích vì sao. Sau khi một tài liệu thành <code>ready</code> (poll 2 s) khung hỏi tự mở, không cần tải lại trang.</td></tr><tr><th scope="row">Thao tác tới câu trả lời đầu tiên</th><td>Tài liệu mới: chọn tệp &rarr; đợi sẵn sàng &rarr; nhập &rarr; gửi = 4 thao tác (mục tiêu &le; 5, trụ cột P3).</td></tr><tr><th scope="row">Khả năng tiếp cận</th><td>Liên kết &ldquo;Bỏ qua tới khung hỏi đáp&rdquo;; nút tải là <code>button</code> thật; khu vực trao đổi <code>role="log"</code>, <code>aria-live="polite"</code>.</td></tr><tr><th scope="row">Tiêu chí chấp nhận</th><td>AC-001 (tải được), US-006-AC2 (trống: hướng dẫn tải trước và không gửi được câu hỏi).</td></tr><tr><th scope="row">Điểm còn mở</th><td>Giới hạn kích thước <code>{maxFileSizeMb}</code> [TBD OQ-009]; vị trí lưu trữ trong dòng lưu ý [TBD OQ-005].</td></tr></table><p class="sample">Mọi tên tệp và nội dung trả lời trên màn hình là minh họa; dấu <code>…</code> và <code>{…}</code> là giá trị lấy từ API hoặc cấu hình, chưa được quyết định.</p></details>
+</section>
+<script>
+(function(){
+  'use strict';
+  var body = document.body;
+  var toggle = document.getElementById('anno-toggle');
+  if (toggle) {
+    toggle.addEventListener('change', function(){ body.classList.toggle('show-anno', toggle.checked); });
+  }
+
+  /* Khung hỏi: kiểm tra rỗng, đếm ký tự, Enter gửi / Shift+Enter xuống dòng */
+  var q = document.getElementById('q');
+  var send = document.getElementById('send');
+  var count = document.getElementById('count');
+  var LIMIT = null; /* null = chưa cấu hình (GET /config -> maxQuestionLength) [TBD OQ-P06] */
+  function refresh(){
+    if (!q) return;
+    var n = q.value.length;
+    var empty = q.value.trim().length === 0;
+    if (count) count.textContent = n + ' / ' + (LIMIT === null ? '{giới hạn}' : LIMIT);
+    if (send && !q.hasAttribute('data-lock-send')) send.disabled = empty || q.disabled;
+  }
+  if (q) {
+    q.addEventListener('input', refresh);
+    q.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        if (send && !send.disabled) send.click();
+      }
+    });
+    refresh();
+  }
+
+  /* Chọn tệp: nút mở hộp chọn tệp; kéo thả không làm trình duyệt rời trang */
+  var pick = document.getElementById('pick');
+  var file = document.getElementById('file');
+  var drop = document.getElementById('drop');
+  if (pick && file) { pick.addEventListener('click', function(){ file.click(); }); }
+  if (drop) {
+    ['dragenter','dragover'].forEach(function(t){ drop.addEventListener(t, function(e){ e.preventDefault(); drop.classList.add('drop--over'); }); });
+    ['dragleave','drop'].forEach(function(t){ drop.addEventListener(t, function(e){ e.preventDefault(); drop.classList.remove('drop--over'); }); });
+  }
+
+  /* Hộp thoại: bẫy focus, Esc để hủy, trả focus về nút mở */
+  var dlg = document.getElementById('dlg');
+  var opener = null;
+  function focusables(root){
+    return Array.prototype.slice.call(root.querySelectorAll('button:not([disabled]),[href],input:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'));
+  }
+  window.cwdOpenDialog = function(btn){
+    if (!dlg) { window.location.href = 'scr-04-xac-nhan-xoa.html'; return; } /* màn hình không có hộp thoại: chuyển tới SCR-04 để xem thiết kế */
+    opener = btn || document.activeElement;
+    dlg.hidden = false;
+    var cancel = document.getElementById('dlg-cancel');
+    if (cancel) cancel.focus();
+  };
+  window.cwdCloseDialog = function(){
+    if (!dlg) return;
+    dlg.hidden = true;
+    if (opener && opener.focus) opener.focus();
+  };
+  if (dlg) {
+    dlg.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') { e.preventDefault(); if (!dlg.hasAttribute('data-busy')) window.cwdCloseDialog(); return; }
+      if (e.key !== 'Tab') return;
+      var f = focusables(dlg); if (!f.length) return;
+      var first = f[0], last = f[f.length-1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+  }
+  /* Chuyển trạng thái minh họa của hộp thoại: idle | deleting | error */
+  window.cwdDialogState = function(state){
+    if (!dlg) return;
+    dlg.setAttribute('data-state', state);
+    var busy = state === 'deleting';
+    if (busy) dlg.setAttribute('data-busy',''); else dlg.removeAttribute('data-busy');
+    var ids = ['dlg-cancel','dlg-confirm'];
+    ids.forEach(function(id){ var b = document.getElementById(id); if (b) b.disabled = busy; });
+    var err = document.getElementById('dlg-error'); if (err) err.hidden = state !== 'error';
+    var prog = document.getElementById('dlg-progress'); if (prog) prog.hidden = !busy;
+    var c = document.getElementById('dlg-confirm');
+    if (c) c.lastChild.textContent = state === 'error' ? ' Thử xóa lại' : ' Xóa tài liệu';
+    var st = document.getElementById('dlg-state-label'); if (st) st.textContent = state;
+    document.querySelectorAll('[data-demo-state]').forEach(function(b){
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-demo-state') === state));
+    });
+  };
+  document.querySelectorAll('[data-demo-state]').forEach(function(b){
+    b.addEventListener('click', function(){ window.cwdDialogState(b.getAttribute('data-demo-state')); });
+  });
+
+  /* Nút "Cuộc trao đổi mới": chỉ xóa phía trình duyệt (sessionStorage), không gọi API */
+  var reset = document.getElementById('new-chat');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      var log = document.getElementById('log');
+      if (log) { log.innerHTML = '<p class="hint" role="status">Đã bắt đầu cuộc trao đổi mới. Hãy nhập câu hỏi.</p>'; }
+      reset.disabled = true;
+      if (q) { q.focus(); }
+    });
+  }
+})();
+</script>
+</body>
+</html>

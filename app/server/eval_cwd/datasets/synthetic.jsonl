@@ -1,0 +1,14 @@
+{"id": "q01", "kind": "in_scope", "question": "Điều khoản thanh toán của hợp đồng A là gì?", "expected_status": "answered", "expected_docs": ["hop-dong-A.pdf"], "expected_pages": [1]}
+{"id": "q02", "kind": "in_scope", "question": "Phí phạt chậm thanh toán là bao nhiêu?", "expected_status": "answered", "expected_docs": ["hop-dong-A.pdf"], "expected_pages": [1]}
+{"id": "q03", "kind": "in_scope", "question": "Thiết bị được bảo hành bao lâu?", "expected_status": "answered", "expected_docs": ["hop-dong-A.pdf"], "expected_pages": [2]}
+{"id": "q04", "kind": "in_scope", "question": "Tranh chấp được giải quyết ở đâu?", "expected_status": "answered", "expected_docs": ["hop-dong-A.pdf"], "expected_pages": [2]}
+{"id": "q05", "kind": "in_scope", "question": "Đơn giá thiết bị model M2 trong báo giá là bao nhiêu?", "expected_status": "answered", "expected_docs": ["bao-gia-B.pdf"], "expected_pages": [1]}
+{"id": "q06", "kind": "in_scope", "question": "Báo giá có hiệu lực trong bao lâu?", "expected_status": "answered", "expected_docs": ["bao-gia-B.pdf"], "expected_pages": [1]}
+{"id": "q07", "kind": "in_scope", "question": "Phụ cấp lưu trú công tác trong nước là bao nhiêu?", "expected_status": "answered", "expected_docs": ["quy-dinh-C.pdf"], "expected_pages": [1]}
+{"id": "q08", "kind": "in_scope", "question": "Hồ sơ thanh toán công tác phí phải nộp trong bao lâu?", "expected_status": "answered", "expected_docs": ["quy-dinh-C.pdf"], "expected_pages": [1]}
+{"id": "q09", "kind": "multi_doc", "question": "So sánh thời hạn giao hàng của hợp đồng A và báo giá B", "expected_status": "answered", "expected_docs": ["hop-dong-A.pdf", "bao-gia-B.pdf"]}
+{"id": "q10", "kind": "multi_doc", "question": "Điều khoản thanh toán trong hợp đồng A và báo giá B khác nhau thế nào?", "expected_status": "answered", "expected_docs": ["hop-dong-A.pdf", "bao-gia-B.pdf"]}
+{"id": "q11", "kind": "out_of_scope", "question": "Giá cổ phiếu Apple hôm nay là bao nhiêu?", "expected_status": "not_found", "expected_docs": []}
+{"id": "q12", "kind": "out_of_scope", "question": "Thủ đô của nước Úc là thành phố nào?", "expected_status": "not_found", "expected_docs": []}
+{"id": "q13", "kind": "out_of_scope", "question": "Chính sách nghỉ thai sản của công ty quy định thế nào?", "expected_status": "not_found", "expected_docs": []}
+{"id": "q14", "kind": "out_of_scope", "question": "Lịch họp hội đồng quản trị tháng tới?", "expected_status": "not_found", "expected_docs": []}

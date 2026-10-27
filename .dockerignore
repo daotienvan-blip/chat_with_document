@@ -1,0 +1,14 @@
+# Context build của app/deploy/Dockerfile.* là thư mục gốc dự án: chỉ gửi những gì ảnh cần.
+*
+!app/server/pyproject.toml
+!app/server/alembic.ini
+!app/server/cwd_server
+!app/web
+!app/deploy/proxy
+!docs/04-design/schema.sql
+!docs/04-design/openapi.yaml
+**/__pycache__
+**/*.egg-info
+app/web/node_modules
+app/web/dist
+app/web/tsconfig.tsbuildinfo
