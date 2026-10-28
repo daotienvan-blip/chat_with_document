@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
+from uuid import UUID
 
 from cwd_server.core.text import words
 from cwd_server.core.types import RetrievedChunk
@@ -36,7 +37,8 @@ def rrf(lists: list[list[RetrievedChunk]], k: int = 60) -> list[RetrievedChunk]:
 
 
 def cap_per_document(chunks: list[RetrievedChunk], total: int, per_doc: int) -> list[RetrievedChunk]:
-    out, per = [], {}
+    out: list[RetrievedChunk] = []
+    per: dict[UUID, int] = {}
     for ch in chunks:
         if per.get(ch.document_id, 0) >= per_doc:
             continue

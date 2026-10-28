@@ -40,4 +40,4 @@ app/
 
 ## Lệnh
 
-`make check` · `make test-int` · `make smoke` · `make eval` · `make trace` · `make spike` · `make logs` · `make db-up` / `make db-down`
+`make ci` (L0 = `.github/workflows/ci.yml`) · `make check` · `make test-int` · `make smoke` · `make eval` · `make trace` · `make spike` · `make logs` · `make db-up` / `make db-down`

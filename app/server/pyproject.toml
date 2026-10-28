@@ -24,6 +24,8 @@ dev = [
     "import-linter>=2.0",
     "jsonschema>=4.21",
     "pyyaml>=6",
+    "pytest-cov>=5",
+    "mypy>=1.10",
 ]
 
 [build-system]
@@ -48,6 +50,21 @@ target-version = "py311"
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP"]
 ignore = ["E501", "B008"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+
+[tool.coverage.run]
+branch = true
+source = ["cwd_server"]
+omit = ["cwd_server/persistence/migrations/*", "cwd_server/api/main.py"]
+
+[tool.coverage.report]
+# Cổng L0: coverage ≥ 70% trên unit + tích hợp (docs/07-verification/test-plan.md §7)
+fail_under = 70
+skip_covered = true
+show_missing = true
 
 [tool.importlinter]
 root_package = "cwd_server"

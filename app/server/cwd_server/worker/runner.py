@@ -4,7 +4,7 @@ from __future__ import annotations
 import logging
 import threading
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from datetime import UTC, datetime, timedelta
 
 from cwd_server.core.errors import RetryableError
@@ -24,7 +24,7 @@ def next_run_after(attempts: int, now: datetime | None = None) -> datetime | Non
 
 
 class Runner:
-    def __init__(self, db, jobs, docs, handlers: dict[JobType, Callable[[Job], None]], lock_minutes: int = 10,
+    def __init__(self, db, jobs, docs, handlers: Mapping[JobType, Callable[[Job], object]], lock_minutes: int = 10,
                  poll_s: float = 1.0, breaker_reopen_at: Callable[[], datetime | None] | None = None):
         self.db, self.jobs, self.docs, self.handlers = db, jobs, docs, handlers
         self.lock_minutes, self.poll_s = lock_minutes, poll_s

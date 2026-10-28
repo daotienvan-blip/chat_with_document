@@ -12,3 +12,4 @@
 {"id": "q12", "kind": "out_of_scope", "question": "Thủ đô của nước Úc là thành phố nào?", "expected_status": "not_found", "expected_docs": []}
 {"id": "q13", "kind": "out_of_scope", "question": "Chính sách nghỉ thai sản của công ty quy định thế nào?", "expected_status": "not_found", "expected_docs": []}
 {"id": "q14", "kind": "out_of_scope", "question": "Lịch họp hội đồng quản trị tháng tới?", "expected_status": "not_found", "expected_docs": []}
+{"id": "q15", "kind": "out_of_scope", "question": "Công ty có bao nhiêu nhân viên ở chi nhánh Đà Nẵng?", "expected_status": "not_found", "expected_docs": [], "note": "DEF-001: AI giả trả 'answered' (phát hiện 2026-10-28 khi chụp ảnh hướng dẫn)"}

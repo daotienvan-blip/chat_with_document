@@ -36,7 +36,7 @@ def _child_main() -> None:  # chạy trong tiến trình con
     if doc.needs_pass:
         sys.exit(EXIT_ENCRYPTED)
     try:
-        pages = [{"n": i + 1, "t": p.get_text("text")} for i, p in enumerate(doc)]
+        pages = [{"n": i + 1, "t": doc[i].get_text("text")} for i in range(doc.page_count)]
     except Exception:
         sys.exit(EXIT_CORRUPT)
     if not pages:
