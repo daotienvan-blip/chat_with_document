@@ -4,7 +4,7 @@ Trạng thái ngày 2026-10-28: **L0 xanh · L1 xong · L2/L3/L4 chờ người.
 
 | Tầng | Trạng thái | Bằng chứng |
 |---|---|---|
-| L0 — CI (lint, kiểu, test, coverage ≥ 70%, quét bí mật, build < 10 phút) | ✅ Xanh cục bộ (`make ci`, 137 s); workflow GitHub chưa chạy lần đầu | `evidence/ci.log`, `.github/workflows/ci.yml` |
+| L0 — CI (lint, kiểu, test, coverage ≥ 70%, quét bí mật, build < 10 phút) | ⚠️ Xanh cục bộ (`make ci`, 137 s); **GitHub đỏ** trên `3414187` và `b80b758` (thiếu font trên runner — INC-2026-10-28-01, sửa ở `fix/ci-vietnamese-font`) | `evidence/ci.log`, `.github/workflows/ci.yml` |
 | L1 — Agent review (rubric + IEEE 1028, trích dòng) | ✅ Xong — 14 phát hiện (3 Major), RO-1 13/14, RO-2 10/14 | `review-record.md`, `Code_Review_IEEE_1028_Checklist.xlsx` |
 | L2 — Người duyệt (≠ tác giả, PR ≤ 400 dòng, đọc diff) | ⏳ Chờ — **chưa chỉ định người duyệt** (2026-10-28) | `review-record.md` §8, `l2-reviewer-guide.md`, `pr-description.md` |
 | L3 — Inspection vùng rủi ro cao | ⏳ Chờ | `review-record.md` §7 |
