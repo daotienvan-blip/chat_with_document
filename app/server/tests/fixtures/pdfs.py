@@ -12,6 +12,9 @@ FONT = next((f for f in FONT_CANDIDATES if os.path.exists(f)), None)
 
 def _insert(page, text: str) -> None:
     rect = pymupdf.Rect(50, 50, 545, 800)
+    if not FONT and not text.isascii():
+        # font mặc định không có dấu tiếng Việt ⇒ chữ thành "?" và test hỏng âm thầm
+        raise RuntimeError("Thiếu font có dấu tiếng Việt cho PDF test: cài fonts-dejavu-core")
     if FONT:
         page.insert_textbox(rect, text, fontsize=11, fontfile=FONT, fontname="F0")
     else:
