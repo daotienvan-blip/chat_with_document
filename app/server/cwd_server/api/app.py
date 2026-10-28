@@ -16,7 +16,14 @@ from cwd_server.api.problems import problem
 from cwd_server.api.schemas import AnswerOut, ConfigOut, DocumentListOut, DocumentOut, QuestionIn
 from cwd_server.container import Container
 from cwd_server.core.documents.validate_upload import effective_limit_mb, validate_upload
-from cwd_server.core.errors import EmptyQuestion, FileTooLarge, InvalidRequest, NotFound, QuestionTooLong
+from cwd_server.core.errors import (
+    EmptyQuestion,
+    FileTooLarge,
+    InvalidRequest,
+    NotFound,
+    QuestionTooLong,
+    RateLimited,
+)
 from cwd_server.platform import metrics
 from cwd_server.platform.logging import request_id_var
 
@@ -59,7 +66,7 @@ def create_app(c: Container) -> FastAPI:
                 client = (fwd.split(",")[0].strip() if fwd else None) or (request.client.host if request.client else "?")
                 try:
                     c.rate_limiter.hit(client, _group(request))
-                except Exception as e:
+                except RateLimited as e:
                     return problem(e.code, e.detail, retry_after=e.retry_after)
             try:
                 resp = await call_next(request)

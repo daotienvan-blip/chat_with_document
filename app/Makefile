@@ -7,7 +7,7 @@ PGDATA  := /opt/homebrew/var/postgresql@17
 VAR     := var
 PORT    ?= 8000
 
-.PHONY: up down prod-env prod-up prod-down prod-ps proxy-test setup check test-int contract trace db-up db-down migrate build-web samples run stop demo smoke spike eval e2e proxy-test llm-smoke logs
+.PHONY: ci up down prod-env prod-up prod-down prod-ps proxy-test setup check test-int contract trace db-up db-down migrate build-web samples run stop demo smoke spike eval e2e proxy-test llm-smoke logs
 
 setup:                      ## cài phụ thuộc server + web
 	cd server && /opt/homebrew/bin/python3.12 -m venv .venv && .venv/bin/pip install -q -e '.[dev]'
@@ -16,6 +16,9 @@ setup:                      ## cài phụ thuộc server + web
 check:                      ## lint + hợp đồng phụ thuộc + unit test server + typecheck/test web
 	cd server && .venv/bin/ruff check cwd_server tests scripts && .venv/bin/lint-imports && .venv/bin/pytest -p no:warnings
 	cd web && npx tsc -b --noEmit && npx vitest run
+
+ci: db-up                   ## L0 cục bộ = .github/workflows/ci.yml; log + coverage vào var/ci/
+	@mkdir -p $(VAR)/ci && bash deploy/ci-local.sh 2>&1 | tee $(VAR)/ci/ci.log; exit $${PIPESTATUS[0]}
 
 test-int: db-up             ## kiểm thử tích hợp trên PostgreSQL thật (CSDL cwd_test)
 	cd server && .venv/bin/pytest -p no:warnings -m integration

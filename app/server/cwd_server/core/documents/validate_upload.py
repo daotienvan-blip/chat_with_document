@@ -6,7 +6,7 @@ import re
 import tempfile
 import unicodedata
 from dataclasses import dataclass
-from typing import BinaryIO
+from typing import IO, BinaryIO
 
 from cwd_server.core.errors import FileTooLarge, InvalidRequest, UnsupportedType
 
@@ -20,7 +20,7 @@ class ValidatedUpload:
     name: str
     size: int
     sha256: str
-    file: BinaryIO  # đã tua về đầu
+    file: IO[bytes]  # đã tua về đầu
 
 
 def sanitize_name(filename: str | None) -> str:

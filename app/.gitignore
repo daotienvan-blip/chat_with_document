@@ -9,3 +9,7 @@ server/.ruff_cache/
 web/node_modules/
 web/dist/
 web/tsconfig.tsbuildinfo
+server/.coverage
+server/coverage.xml
+server/junit.xml
+server/.mypy_cache/

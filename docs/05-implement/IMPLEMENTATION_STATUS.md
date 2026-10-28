@@ -11,7 +11,7 @@
 | `make prod-up` + `make proxy-test` | Stack kiểu sản xuất trên Colima; proxy 13/13; `rolling-test.sh` 7/7; smoke 17/17 qua HTTPS |
 | `make test-int` | **29** test tích hợp (gồm 2 test adapter S3 — tự bỏ qua khi không có `make up`) trên PostgreSQL 17 + pgvector 0.8.7 thật; mọi phản hồi API trong test được kiểm theo `openapi.yaml` |
 | `make smoke` | **17/17** bước đầu-cuối trên hệ thống đang chạy (tải PDF → sẵn sàng → hỏi có nguồn → mở nguồn → nhiều tài liệu → ngoài tài liệu → PDF mật khẩu → tệp sai → xóa) |
-| `make eval` | Bộ tổng hợp 14 câu, AI giả trích xuất: 100% câu ngoài tài liệu → `not_found`; 100% nguồn đúng tài liệu/trang. **Bộ nhỏ và đã được dùng để chỉnh AI giả — không phản ánh chất lượng mô hình thật** |
+| `make eval` | Bộ tổng hợp 15 câu, AI giả trích xuất: **80%** câu ngoài tài liệu → `not_found` (q15 thêm 2026-10-28 lộ DEF-001); 100% nguồn đúng tài liệu/trang. **Bộ nhỏ và đã được dùng để chỉnh AI giả — không phản ánh chất lượng mô hình thật** |
 | `make trace` | 22/23 AC của USER_STORIES có test; US-015-AC1 chỉ có bằng chứng tài liệu (chờ OQ-005) |
 | Spike S3-00 | Quét chính xác p95 27 ms ở 40.000 đoạn/384 chiều ⇒ giữ `exact` (`notes/spike-hnsw.md`) |
 | Khôi phục thử | Sao lưu → khôi phục → khớp số liệu, đối soát sạch (`runbook.md`) |
@@ -27,7 +27,7 @@
 | `/readyz` kiểm quyền INSERT trên `jobs` thay vì đọc hàng đợi | `cwd_api` không có SELECT trên `jobs` ⇒ bản cũ luôn 503 khi chạy đúng phân quyền (tìm thấy ở S8-05) |
 | Lifecycle bucket: xóa phiên bản cũ sau 7 ngày | Versioning (Database_Design §5.2) khiến PDF đã xóa còn lại **vô thời hạn**; quy tắc đưa về đúng giới hạn 7 ngày của OQ-D01. Chưa kiểm chứng việc xóa thực tế |
 | AI giả trích xuất (`ExtractiveLlm`) thay cho dịch vụ AI | Không có khóa AI; người dùng chọn. Adapter HTTP tương thích OpenAI có sẵn, bật bằng `LLM_PROVIDER=http` |
-| Không dùng mypy, không có tệp CI | Giảm ma sát; kiểu được giữ bằng ruff + typecheck TS. Chưa có hệ thống CI để gắn vào |
+| ~~Không dùng mypy, không có tệp CI~~ → đã bổ sung ở giai đoạn 7 (2026-10-28) | `.github/workflows/ci.yml` + `make ci`: ruff, mypy (sửa 8 lỗi), import-linter, coverage ≥ 70%, gitleaks, build ảnh — xem `docs/07-verification/` |
 | Web test dùng `fetch` giả thay cho MSW | Ít phụ thuộc hơn; cùng mục đích |
 | E2E bằng `scripts/smoke.py` (HTTP) thay cho Playwright | Chưa có trình duyệt tự động trên máy; giao diện được kiểm bằng test thành phần |
 | `GET …/file` có thêm `304` (If-None-Match) | Đã bổ sung vào `openapi.yaml` và `API_Design.md` (thay đổi cộng thêm) |

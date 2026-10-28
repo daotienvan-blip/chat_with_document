@@ -1,0 +1,22 @@
+server/.venv/bin/python server/scripts/smoke.py http://localhost:8000 samples
+Kiểm tra khói http://localhost:8000
+  ✓ readyz
+  ✓ phục vụ giao diện web
+  ✓ tải lên hop-dong-A.pdf → 202 processing
+  ✓ tải lên bao-gia-B.pdf → 202 processing
+  ✓ tải lên quy-dinh-C.pdf → 202 processing
+  ✓ hop-dong-A.pdf sẵn sàng (2 trang)
+  ✓ bao-gia-B.pdf sẵn sàng (1 trang)
+  ✓ quy-dinh-C.pdf sẵn sàng (1 trang)
+  ✓ hỏi có căn cứ → answered
+  ✓ nguồn: hop-dong-A.pdf tr. [1, 2]
+     câu trả lời: Điều 3. Điều khoản thanh toán. Bên mua thanh toán toàn bộ giá trị hợp đồng trong vòng 30 ngày kể từ ngày nhận hóa đơn hợp lệ.
+  ✓ mở tài liệu nguồn (Range)
+  ✓ câu hỏi nhiều tài liệu → answered, nguồn ['hop-dong-A.pdf', 'bao-gia-B.pdf']
+  ✓ câu ngoài tài liệu → not_found, không nguồn
+  ✓ PDF có mật khẩu → FILE_ENCRYPTED
+  ✓ tệp không phải PDF → 400 UNSUPPORTED_TYPE
+  ✓ xóa quy-dinh-C.pdf → 204
+  ✓ sau khi xóa, không còn nguồn từ tài liệu đã xóa
+
+Đạt 17 kiểm tra.

@@ -1,0 +1,16 @@
+deploy/proxy/proxy-test.sh https://localhost:8443
+  ✓ TLS 1.2+ được chấp nhận
+  ✓ TLS 1.1 bị từ chối
+  ✓ CSP default-src 'self'; frame-ancestors 'none'
+  ✓ X-Content-Type-Options: nosniff
+  ✓ Referrer-Policy: no-referrer
+  ✓ Server không lộ phiên bản (Server: nginx)
+  ✓ không có CORS
+  ✓ X-Request-Id bị ghi đè (nhận: fa0547073bf023588a0ea8f9060bb75c)
+  ✓ 413 → problem+json FILE_TOO_LARGE có requestId
+  ✓ 429 sau 7 yêu cầu → problem+json RATE_LIMITED, có Retry-After
+  ✓ thân 413/429 là JSON hợp lệ đủ trường bắt buộc
+  ✓ /metrics từ máy dev → 403
+  ✓ truy cập từ 100.64.10.0/24 (ngoài allowlist) → 403 (nhận: 403)
+
+Đạt 13, lỗi 0.
