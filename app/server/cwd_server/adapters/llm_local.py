@@ -105,16 +105,20 @@ class ExtractiveLlm(HashEmbedder):
         qm = _Q_RE.search(user)
         if not qm:
             raise AiBadOutput("thiếu câu hỏi")
-        q_kw = keywords(qm.group(1))
+        q_text = qm.group(1)
+        q_kw = keywords(q_text)
         none = {"status": "not_found", "answer": "", "citations": []}
         if not q_kw:
             return none
+        # Câu hỏi có dấu ⇒ so khớp đúng dấu ("tỷ" ≠ "ty", "đã" ≠ "đà" — DEF-001); chỉ bỏ dấu khi người dùng gõ không dấu.
+        fuzzy = strip_accents(q_text) == q_text
         sents: list[tuple[str, str, set[str]]] = []  # (mã đoạn, câu, từ khóa trúng)
         for cid, body in _DOAN_RE.findall(user):
             for sent in sentences(body):
                 sw = set(words(sent))
-                sw |= {strip_accents(w) for w in sw}
-                hit = {w for w in q_kw if w in sw or strip_accents(w) in sw}
+                if fuzzy:
+                    sw |= {strip_accents(w) for w in sw}
+                hit = {w for w in q_kw if w in sw}
                 if hit:
                     sents.append((cid, sent, hit))
         if not sents:

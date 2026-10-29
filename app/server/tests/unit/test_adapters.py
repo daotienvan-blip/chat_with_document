@@ -51,6 +51,22 @@ def test_extractive_cites_and_not_found():
     assert out2 == {"status": "not_found", "answer": "", "citations": []}
 
 
+@pytest.mark.req("US-010-AC1")
+def test_extractive_accents_def001():
+    """DEF-001: câu có dấu không được khớp "tỷ"≡"ty", "đã"≡"đà"; câu gõ không dấu vẫn tìm được văn bản có dấu."""
+    llm = ExtractiveLlm(64)
+    ctx = ('<tai_lieu>\n<doan id="c1" tai_lieu="c.pdf" trang="1-1">\nMục 1. Nhân viên đi công tác được thanh toán '
+           'chi phí đi lại theo hóa đơn thực tế.\n</doan>\n<doan id="c2" tai_lieu="a.pdf" trang="1-1">\nĐiều 2. Giá '
+           'trị hợp đồng. Tổng giá trị hợp đồng là 1,2 tỷ đồng, đã bao gồm thuế giá trị gia tăng.\n</doan>\n</tai_lieu>')
+
+    def ask(q):
+        return llm.generate("", f"<cau_hoi>\n{q}\n</cau_hoi>\n{ctx}", LLM_OUTPUT_SCHEMA)
+
+    assert ask("Công ty có bao nhiêu nhân viên ở chi nhánh Đà Nẵng?")["status"] == "not_found"
+    out = ask("gia tri hop dong la bao nhieu?")
+    assert out["status"] == "answered" and out["citations"] == ["c2"]
+
+
 def _http(handler):
     return HttpLlm("http://ai.local/v1", "sk-secret", "emb", "chat", dim=3, transport=httpx.MockTransport(handler))
 
