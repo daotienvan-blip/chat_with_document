@@ -11,6 +11,7 @@ from cwd_server.core.errors import (
     ConfigurationError,
     PdfCorrupt,
     PdfEncrypted,
+    PdfExtractorCrashed,
     PdfTimeout,
     RetryableError,
     StorageUnavailable,
@@ -52,6 +53,11 @@ class IngestionService:
             return self._fail(doc_id, FailureReason.FILE_ENCRYPTED)
         except PdfCorrupt:
             return self._fail(doc_id, FailureReason.FILE_CORRUPT)
+        except PdfExtractorCrashed as e:
+            # không thử lại: hết bộ nhớ lặp lại y hệt (F-02)
+            log.warning("trình trích PDF sập", extra={"event": "extract_crashed", "documentId": str(doc_id),
+                                                      "errorCode": str(e)})
+            return self._fail(doc_id, FailureReason.PROCESSING_ERROR)
         except PdfTimeout as e:
             raise RetryableError("trích văn bản quá thời gian") from e
         drafts = self.chunker.split(pages)

@@ -8,6 +8,7 @@ import logging
 import httpx
 import pytest
 
+from cwd_server.adapters import pymupdf_extractor
 from cwd_server.adapters.llm_http import HttpLlm
 from cwd_server.adapters.llm_local import ExtractiveLlm, FakeLlm
 from cwd_server.adapters.pymupdf_extractor import PyMuPdfExtractor
@@ -162,3 +163,19 @@ def test_pdf_extractor_cases():
     with pytest.raises(PdfCorrupt):
         ex.extract(pdfs.corrupt_pdf())
     assert all(not p.text.strip() for p in ex.extract(pdfs.image_only_pdf()))
+
+
+@pytest.mark.parametrize("rc,stderr,cause", [
+    (1, b"Traceback (most recent call last):\n  ...\nMemoryError\n", "MemoryError"),
+    (1, b"ImportError: lib.so: failed to map segment from shared object\n", "ImportError"),
+    (-9, b"", "SIGKILL"),
+    (3, b"van ban tai lieu", "exit3"),
+])
+def test_pdf_extractor_crash_is_not_corrupt(monkeypatch, rc, stderr, cause):
+    """Tiến trình con sập (vd. vượt RLIMIT_AS) ≠ tệp hỏng; nguyên nhân chỉ là tên lỗi, không có nội dung."""
+    from cwd_server.core.errors import PdfExtractorCrashed
+    monkeypatch.setattr(pymupdf_extractor.subprocess, "run",
+                        lambda *a, **k: pymupdf_extractor.subprocess.CompletedProcess(a, rc, b"", stderr))
+    with pytest.raises(PdfExtractorCrashed) as e:
+        PyMuPdfExtractor().extract(b"%PDF")
+    assert str(e.value) == cause

@@ -7,15 +7,18 @@ Lưu ý giấy phép: PyMuPDF dùng AGPL/thương mại [Unverified — cần ki
 from __future__ import annotations
 
 import json
+import re
+import signal
 import subprocess
 import sys
 import unicodedata
 
-from cwd_server.core.errors import PdfCorrupt, PdfEncrypted, PdfTimeout
+from cwd_server.core.errors import PdfCorrupt, PdfEncrypted, PdfExtractorCrashed, PdfTimeout
 from cwd_server.core.types import Page
 
 EXIT_ENCRYPTED = 10
 EXIT_CORRUPT = 11
+_EXC_RE = re.compile(rb"^([A-Za-z_][\w.]*(?:Error|Exception))\b", re.M)
 
 
 def _child_main() -> None:  # chạy trong tiến trình con
@@ -37,6 +40,8 @@ def _child_main() -> None:  # chạy trong tiến trình con
         sys.exit(EXIT_ENCRYPTED)
     try:
         pages = [{"n": i + 1, "t": doc[i].get_text("text")} for i in range(doc.page_count)]
+    except MemoryError:
+        raise  # hết bộ nhớ là lỗi hệ thống, không phải tệp hỏng
     except Exception:
         sys.exit(EXIT_CORRUPT)
     if not pages:
@@ -59,8 +64,21 @@ class PyMuPdfExtractor:
             raise PdfTimeout("quá thời gian trích văn bản") from e
         if r.returncode == EXIT_ENCRYPTED:
             raise PdfEncrypted()
-        if r.returncode != 0:
+        if r.returncode == EXIT_CORRUPT:
             raise PdfCorrupt()
+        if r.returncode != 0:
+            raise PdfExtractorCrashed(crash_cause(r.returncode, r.stderr))
         # NFKC: đổi khoảng trắng không ngắt (\xa0) và ký tự tương thích về dạng thường để tách từ/FTS đúng
         return [Page(p["n"], unicodedata.normalize("NFKC", p["t"]).replace("\u00ad", "-"))  # gạch nối mềm
                 for p in json.loads(r.stdout.decode("utf-8"))]
+
+
+def crash_cause(returncode: int, stderr: bytes) -> str:
+    """Tên tín hiệu, hoặc tên lớp lỗi cuối cùng trong traceback — không lấy nội dung để không lộ văn bản tài liệu."""
+    if returncode < 0:
+        try:
+            return signal.Signals(-returncode).name
+        except ValueError:
+            return f"signal{-returncode}"
+    names = _EXC_RE.findall(stderr or b"")
+    return names[-1].decode("ascii", "replace") if names else f"exit{returncode}"

@@ -174,6 +174,16 @@ def test_ingestion_outcomes(client, runner, container, data, status, reason):
         assert doc["pageCount"] == 2
 
 
+def test_ingestion_extractor_crash_is_processing_error(client, runner, container, monkeypatch):
+    from cwd_server.core.errors import PdfExtractorCrashed
+
+    def crash(data):
+        raise PdfExtractorCrashed("MemoryError")
+    monkeypatch.setattr(container.ingestion.extractor, "extract", crash)
+    doc = _ready(client, runner, pdfs.text_pdf(CONTRACT))
+    assert doc["status"] == "failed" and doc["failureReason"] == "PROCESSING_ERROR"
+
+
 def test_ingestion_idempotent_and_deleted_midway(client, runner, container):
     doc = _ready(client, runner, pdfs.text_pdf(CONTRACT))
     did = uuid.UUID(doc["id"])

@@ -73,6 +73,11 @@ class PdfEncrypted(Exception):
     pass
 
 
+class PdfExtractorCrashed(Exception):
+    """Tiến trình con trích PDF chết bất thường (hết bộ nhớ, tín hiệu) — lỗi hệ thống, không phải tệp hỏng.
+    Thông điệp chỉ là tên lớp lỗi hoặc tín hiệu, không chứa nội dung tài liệu."""
+
+
 class PdfTimeout(Exception):
     """Trích văn bản vượt thời gian — lỗi tạm thời, thử lại được."""
 

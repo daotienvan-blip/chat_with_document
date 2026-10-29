@@ -11,7 +11,7 @@ dependencies = [
     "psycopg[binary]>=3.1",
     "alembic>=1.13",
     "python-multipart>=0.0.9",
-    "pymupdf>=1.24",
+    "pymupdf>=1.24,<2",  # 2.0 nạp numpy+onnxruntime khi import: ~830 MB ảo trên x86_64, vượt RLIMIT_AS của tiến trình con
     "httpx>=0.27",
     "prometheus-client>=0.20",
 ]
