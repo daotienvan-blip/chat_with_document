@@ -39,6 +39,7 @@ class Settings(BaseSettings):
     max_file_size_mb: int | None = None  # [TBD: OQ-009]
     hard_max_upload_mb: int = 200  # [Đề xuất] chặn tải không giới hạn khi giới hạn nghiệp vụ còn null
     max_question_length: int | None = None  # [TBD: OQ-P06]
+    hard_max_question_chars: int = 4000  # [Đề xuất] chặn câu hỏi không giới hạn khi giới hạn nghiệp vụ còn null (F-03)
     language: str | None = None  # [TBD: OQ-011]
     poll_interval_ms: int = 2000
 

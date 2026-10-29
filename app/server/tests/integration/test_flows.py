@@ -285,6 +285,12 @@ def test_question_validation(client, container):
     r = client.post("/api/v1/questions", json={"question": "   "})
     assert r.status_code == 400 and r.json()["code"] == "EMPTY_QUESTION"
     assert_matches_openapi(r)
+    # F-03: chưa có giới hạn nghiệp vụ (OQ-P06) ⇒ vẫn chặn ở giới hạn cứng, biên ±1
+    container.settings.hard_max_question_chars = 50
+    assert client.post("/api/v1/questions", json={"question": "x" * 50}).status_code == 200
+    r = client.post("/api/v1/questions", json={"question": "x" * 51})
+    assert r.status_code == 400 and r.json()["code"] == "QUESTION_TOO_LONG" and r.json()["limit"] == 50
+    assert_matches_openapi(r)
     container.settings.max_question_length = 10
     r = client.post("/api/v1/questions", json={"question": "x" * 11})
     assert r.json()["code"] == "QUESTION_TOO_LONG" and r.json()["limit"] == 10

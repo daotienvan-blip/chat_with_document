@@ -185,8 +185,9 @@ def create_app(c: Container) -> FastAPI:
         q = body.question.strip()
         if not q:
             raise EmptyQuestion("Vui lòng nhập câu hỏi.")
-        if s.max_question_length is not None and len(q) > s.max_question_length:
-            raise QuestionTooLong(f"Câu hỏi dài hơn {s.max_question_length} ký tự.", limit=s.max_question_length)
+        limit = s.max_question_length if s.max_question_length is not None else s.hard_max_question_chars
+        if len(q) > limit:
+            raise QuestionTooLong(f"Câu hỏi dài hơn {limit} ký tự.", limit=limit)
         with c.question_guard.slot():
             result = c.answers.ask(q)
         return JSONResponse(AnswerOut.of(result).model_dump(mode="json"), headers=NO_STORE)
