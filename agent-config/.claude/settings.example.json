@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c ' *)"
+    ],
+    "deny": [
+      "mcp__github__push_files",
+      "mcp__github__delete_file",
+      "mcp__github__create_or_update_file",
+      "mcp__github__merge_pull_request",
+      "mcp__atlassian__*delete*",
+      "mcp__atlassian__*Delete*"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I \"$CLAUDE_PROJECT_DIR/.claude/hooks/pdf-only-upload.py\"",
+            "timeout": 10,
+            "statusMessage": "Kiểm tra tệp tải lên (chỉ PDF)"
+          }
+        ]
+      }
+    ]
+  }
+}
