@@ -5,6 +5,7 @@ import { api, ApiError, uploadXhr, type Config, type Doc } from "../../api-clien
 import { FAILURE_MESSAGES, toUiError } from "../../api-client/uiErrors";
 import { Icon } from "../../components/Icon";
 import { DeleteDialog } from "./DeleteDialog";
+import { isPdfFile, PDF_ONLY_MESSAGE } from "./pdfOnly";
 
 const MAX_BACKOFF = 30_000;
 
@@ -134,7 +135,7 @@ export function DocumentsPanel({ config, docs }: { config?: Config; docs: Return
         const ui = toUiError(e);
         if (e.code === "UNSUPPORTED_TYPE" || e.code === "FILE_TOO_LARGE" || e.code === "INVALID_REQUEST") {
           setPending((ps) => ps.filter((p) => p.key !== key));
-          setRejected((r) => [...r, `${file.name}: ${ui.message}`]);
+          setRejected((r) => [...r, `${file.name}: ${e.code === "UNSUPPORTED_TYPE" ? PDF_ONLY_MESSAGE : ui.message}`]);
         } else {
           const msg = e.code === "NETWORK" ? "Mất kết nối khi đang tải lên. Chưa có tài liệu nào được tạo." : ui.message;
           setPending((ps) => ps.map((p) => (p.key === key ? { ...p, state: "failed", message: msg } : p)));
@@ -147,7 +148,7 @@ export function DocumentsPanel({ config, docs }: { config?: Config; docs: Return
     const errs: string[] = [];
     for (const f of Array.from(files)) {
       // Kiểm tra trước ở trình duyệt; máy chủ vẫn là nơi quyết định (S1-05).
-      if (!f.name.toLowerCase().endsWith(".pdf")) errs.push(`${f.name}: Chỉ hỗ trợ tệp PDF.`);
+      if (!isPdfFile(f)) errs.push(`${f.name}: ${PDF_ONLY_MESSAGE}`);
       else if (config?.maxFileSizeMb && f.size > config.maxFileSizeMb * 1024 * 1024)
         errs.push(`${f.name}: Tệp lớn hơn giới hạn ${config.maxFileSizeMb} MB.`);
       else startUpload(f);

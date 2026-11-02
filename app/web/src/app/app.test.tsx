@@ -1,9 +1,10 @@
-import { act, render, screen, waitFor, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { App } from "./App";
 import { toUiError } from "../api-client/uiErrors";
 import { ApiError } from "../api-client/client";
+import { isPdfFile } from "../features/documents/pdfOnly";
 
 type Route = (url: string, init?: RequestInit) => Response | Promise<Response>;
 const json = (body: unknown, status = 200, headers: Record<string, string> = {}) =>
@@ -57,13 +58,46 @@ it("[US-002-AC2][US-003-AC2] trạng thái có chữ, lý do lỗi và tài li�
   expect(screen.getByLabelText("Câu hỏi của bạn")).toBeDisabled(); // chưa có tài liệu ready
 });
 
-it("[US-001-AC3] tệp không phải PDF bị từ chối, không tạo dòng", async () => {
-  setup({ "/api/v1/config": () => json(config), "/api/v1/documents": () => json({ items: [], total: 0 }) });
-  await screen.findByText("Chưa có tài liệu nào");
-  const input = screen.getByLabelText("Chọn tệp PDF");
-  await userEvent.upload(input, new File(["x"], "bao-cao.docx"), { applyAccept: false });
-  expect(await screen.findByRole("alert")).toHaveTextContent("bao-cao.docx: Chỉ hỗ trợ tệp PDF.");
-  expect(screen.queryAllByTestId("doc-row")).toHaveLength(0);
+it("[US-001-AC3] tệp không phải PDF bị từ chối, không tạo dòng, không gửi yêu cầu tải lên", async () => {
+  const send = vi.spyOn(XMLHttpRequest.prototype, "send").mockImplementation(() => {});
+  try {
+    setup({ "/api/v1/config": () => json(config), "/api/v1/documents": () => json({ items: [], total: 0 }) });
+    await screen.findByText("Chưa có tài liệu nào");
+    const input = screen.getByLabelText("Chọn tệp PDF");
+    await userEvent.upload(input, new File(["x"], "bao-cao.docx"), { applyAccept: false });
+    expect(await screen.findByRole("alert")).toHaveTextContent("bao-cao.docx: Please upload pdf file only");
+    expect(screen.queryAllByTestId("doc-row")).toHaveLength(0);
+    expect(send).not.toHaveBeenCalled();
+  } finally {
+    send.mockRestore();
+  }
+});
+
+it("[US-001-AC3] kéo thả tệp không phải PDF, hoặc tệp .pdf sai loại nội dung, cũng bị chặn", async () => {
+  const send = vi.spyOn(XMLHttpRequest.prototype, "send").mockImplementation(() => {});
+  try {
+    setup({ "/api/v1/config": () => json(config), "/api/v1/documents": () => json({ items: [], total: 0 }) });
+    await screen.findByText("Chưa có tài liệu nào");
+    const zone = screen.getByText(/Chỉ hỗ trợ tệp PDF có văn bản/).closest(".drop")!;
+    const files = [new File(["x"], "anh.png", { type: "image/png" }), new File(["x"], "gia-mao.pdf", { type: "image/png" })];
+    fireEvent.drop(zone, { dataTransfer: { files } });
+    const alerts = await screen.findAllByRole("alert");
+    expect(alerts.map((a) => a.textContent)).toEqual([
+      expect.stringContaining("anh.png: Please upload pdf file only"),
+      expect.stringContaining("gia-mao.pdf: Please upload pdf file only"),
+    ]);
+    expect(send).not.toHaveBeenCalled();
+  } finally {
+    send.mockRestore();
+  }
+});
+
+it("[US-001-AC3] isPdfFile: nhận .pdf (kể cả .PDF, loại rỗng), từ chối đuôi khác hoặc loại khác", () => {
+  expect(isPdfFile(new File(["x"], "a.pdf", { type: "application/pdf" }))).toBe(true);
+  expect(isPdfFile(new File(["x"], "A.PDF"))).toBe(true);
+  expect(isPdfFile(new File(["x"], "a.pdf.exe"))).toBe(false);
+  expect(isPdfFile(new File(["x"], "a", { type: "application/pdf" }))).toBe(false);
+  expect(isPdfFile(new File(["x"], "a.pdf", { type: "text/plain" }))).toBe(false);
 });
 
 it("[US-006-AC1][US-007-AC1][US-008-AC1] hỏi, hiển thị nguồn dạng chip mở đúng trang; giữ qua tải lại", async () => {
