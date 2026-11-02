@@ -1,0 +1,49 @@
+{
+  "id": "PERF-01",
+  "title": "Độ trễ truy xuất vector",
+  "folder": "PERF-01_do-tre-truy-xuat-vector",
+  "planRef": "docs/07-verification/test-plan.md §6.8",
+  "goal": null,
+  "mode": "Tự động – `scripts/spike_hnsw.py` trên CSDL riêng `cwd_spike` (đã migrate 384 chiều, xóa sau khi chạy)",
+  "startedAt": "2026-11-02T12:06:53Z",
+  "finishedAt": "2026-11-02T12:13:56Z",
+  "steps": [
+    {
+      "n": 1,
+      "title": "Nạp dữ liệu thử",
+      "expected": "40.000 đoạn, 384 chiều",
+      "actual": "40000 đoạn, 384 chiều, 417.0 s",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/perf01-spike.log"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "p95 truy vấn vector, chế độ `exact` (đang dùng trong cấu hình)",
+      "expected": "≤ 100 ms (đề xuất)",
+      "actual": "p50 25.5 ms, p95 28.9 ms",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/perf01-spike.log"
+      ]
+    }
+  ],
+  "logs": [
+    "../_logs/perf01-spike.log"
+  ],
+  "notes": [
+    "PostgreSQL 17.11 (Homebrew), pgvector 0.8.7.",
+    "Lần chạy đầu trên CSDL chưa có lược đồ bị lỗi (script đọc số chiều từ bảng `chunks`); đã migrate rồi chạy lại.",
+    "Bảng đầy đủ các chế độ HNSW (ef_search, recall) nằm trong log."
+  ],
+  "env": {
+    "URL ứng dụng": "—",
+    "Bản build": "`6014765` (`origin/main`); mã trong `app/` giống hệt `c6e849b` — commit `6014765` chỉ thêm `CLAUDE.md` và `test_reports/`; không có thay đổi chưa commit trong `app/`",
+    "Máy chạy": "macOS 27.2 (arm64), Python 3.12.16, PyMuPDF 1.28.2, Node v26.12.1",
+    "CSDL": "PostgreSQL 17.11 (Homebrew) + pgvector 0.8.7; stack Docker dùng ảnh `pgvector/pgvector:pg17`",
+    "Docker": "Colima, Docker 29.5.2",
+    "Trình duyệt": "Không dùng — test web chạy trên jsdom (vitest); dự án chưa có Playwright (S8-08)"
+  },
+  "verdict": "ĐẠT"
+}

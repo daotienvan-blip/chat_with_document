@@ -1,0 +1,68 @@
+$ .venv/bin/pytest -o addopts= -p no:cacheprovider -p no:warnings -v -m "not integration" --junitxml=/Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/REG-01_hoi-quy-don-vi-server-va-web/logs/01-junit.xml
+# thư mục: app/server
+# bắt đầu 2026-11-02T12:14:53.750Z · kết thúc 2026-11-02T12:14:55.810Z · mã thoát 0
+
+============================= test session starts ==============================
+platform darwin -- Python 3.12.16, pytest-9.1.1, pluggy-1.7.0 -- /Users/daotienvan/Desktop/SDLC/chat_with_document/app/server/.venv/bin/python3.12
+rootdir: /Users/daotienvan/Desktop/SDLC/chat_with_document/app/server
+configfile: pyproject.toml
+testpaths: tests
+plugins: cov-7.1.0, anyio-4.15.1
+collecting ... collected 83 items / 30 deselected / 53 selected
+
+tests/unit/test_adapters.py::test_hash_embedding_similarity PASSED       [  1%]
+tests/unit/test_adapters.py::test_extractive_cites_and_not_found PASSED  [  3%]
+tests/unit/test_adapters.py::test_extractive_accents_def001 PASSED       [  5%]
+tests/unit/test_adapters.py::test_http_llm_ok_and_dim_check PASSED       [  7%]
+tests/unit/test_adapters.py::test_http_llm_errors[503-AiUnavailable] PASSED [  9%]
+tests/unit/test_adapters.py::test_http_llm_errors[429-AiUnavailable] PASSED [ 11%]
+tests/unit/test_adapters.py::test_http_llm_errors[400-ConfigurationError] PASSED [ 13%]
+tests/unit/test_adapters.py::test_http_llm_errors[timeout-AiTimeout] PASSED [ 15%]
+tests/unit/test_adapters.py::test_http_llm_errors[conn-AiUnavailable] PASSED [ 16%]
+tests/unit/test_adapters.py::test_http_llm_errors[garbage-AiBadOutput] PASSED [ 18%]
+tests/unit/test_adapters.py::test_resilient_retry_then_breaker PASSED    [ 20%]
+tests/unit/test_adapters.py::test_memory_store_range_and_delete PASSED   [ 22%]
+tests/unit/test_adapters.py::test_pdf_extractor_cases PASSED             [ 24%]
+tests/unit/test_adapters.py::test_pdf_extractor_crash_is_not_corrupt[1-Traceback (most recent call last):\n  ...\nMemoryError\n-MemoryError] PASSED [ 26%]
+tests/unit/test_adapters.py::test_pdf_extractor_crash_is_not_corrupt[1-ImportError: lib.so: failed to map segment from shared object\n-ImportError] PASSED [ 28%]
+tests/unit/test_adapters.py::test_pdf_extractor_crash_is_not_corrupt[-9--SIGKILL] PASSED [ 30%]
+tests/unit/test_adapters.py::test_pdf_extractor_crash_is_not_corrupt[3-van ban tai lieu-exit3] PASSED [ 32%]
+tests/unit/test_core_units.py::test_upload_exact_limit_ok_one_byte_over_rejected PASSED [ 33%]
+tests/unit/test_core_units.py::test_upload_rejects_non_pdf[%PDF-1.7\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-bao-cao.docx] PASSED [ 35%]
+tests/unit/test_core_units.py::test_upload_rejects_non_pdf[MZ\x90\x00xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-gia.pdf] PASSED [ 37%]
+tests/unit/test_core_units.py::test_upload_rejects_non_pdf[-rong.pdf] PASSED [ 39%]
+tests/unit/test_core_units.py::test_upload_missing_file PASSED           [ 41%]
+tests/unit/test_core_units.py::test_upload_hash_and_stops_early PASSED   [ 43%]
+tests/unit/test_core_units.py::test_sanitize_name[../../etc/passwd.pdf-passwd.pdf] PASSED [ 45%]
+tests/unit/test_core_units.py::test_sanitize_name[C:\\x\\h\u1ee3p \u0111\u1ed3ng.pdf-h\u1ee3p \u0111\u1ed3ng.pdf] PASSED [ 47%]
+tests/unit/test_core_units.py::test_sanitize_name[-tai-lieu.pdf] PASSED  [ 49%]
+tests/unit/test_core_units.py::test_sanitize_name[a\x00b.pdf-ab.pdf] PASSED [ 50%]
+tests/unit/test_core_units.py::test_chunker_properties PASSED            [ 52%]
+tests/unit/test_core_units.py::test_chunker_empty_and_deterministic PASSED [ 54%]
+tests/unit/test_core_units.py::test_chunker_char_cap PASSED              [ 56%]
+tests/unit/test_core_units.py::test_rrf_and_cap PASSED                   [ 58%]
+tests/unit/test_core_units.py::test_tsquery_safe[\u0110i\u1ec1u kho\u1ea3n 'thanh to\xe1n' & ph\u1ea1t | ! : * ( )] PASSED [ 60%]
+tests/unit/test_core_units.py::test_tsquery_safe[] PASSED                [ 62%]
+tests/unit/test_core_units.py::test_tsquery_safe[???] PASSED             [ 64%]
+tests/unit/test_core_units.py::test_tsquery_safe[a_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b c] PASSED [ 66%]
+tests/unit/test_core_units.py::test_prompt_marks_data_block PASSED       [ 67%]
+tests/unit/test_core_units.py::test_prompt_rules_conflict_and_language PASSED [ 69%]
+tests/unit/test_core_units.py::test_grounding_validator[out0-answered-2] PASSED [ 71%]
+tests/unit/test_core_units.py::test_grounding_validator[out1-not_found-0] PASSED [ 73%]
+tests/unit/test_core_units.py::test_grounding_validator[out2-not_found-0] PASSED [ 75%]
+tests/unit/test_core_units.py::test_grounding_validator[out3-not_found-0] PASSED [ 77%]
+tests/unit/test_core_units.py::test_grounding_validator[out4-not_found-0] PASSED [ 79%]
+tests/unit/test_core_units.py::test_grounding_validator[out5-partial-1] PASSED [ 81%]
+tests/unit/test_core_units.py::test_grounding_validator[out6-not_found-0] PASSED [ 83%]
+tests/unit/test_core_units.py::test_parse_output_rejects[not json] PASSED [ 84%]
+tests/unit/test_core_units.py::test_parse_output_rejects[[]] PASSED      [ 86%]
+tests/unit/test_core_units.py::test_parse_output_rejects[{"status":"answered","answer":"x"}] PASSED [ 88%]
+tests/unit/test_core_units.py::test_parse_output_rejects[raw3] PASSED    [ 90%]
+tests/unit/test_core_units.py::test_parse_output_rejects[raw4] PASSED    [ 92%]
+tests/unit/test_core_units.py::test_parse_output_rejects[raw5] PASSED    [ 94%]
+tests/unit/test_core_units.py::test_parse_output_rejects[raw6] PASSED    [ 96%]
+tests/unit/test_core_units.py::test_load_guard_busy_after_wait PASSED    [ 98%]
+tests/unit/test_core_units.py::test_rate_limiter_bucket_and_recovery PASSED [100%]
+
+- generated xml file: /Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/REG-01_hoi-quy-don-vi-server-va-web/logs/01-junit.xml -
+====================== 53 passed, 30 deselected in 1.43s =======================

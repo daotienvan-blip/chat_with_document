@@ -1,0 +1,36 @@
+{
+  "id": "UI-04",
+  "title": "Ánh xạ lỗi",
+  "folder": "UI-04_anh-xa-loi",
+  "planRef": "docs/07-verification/test-plan.md §6.11",
+  "goal": "Bảng ánh xạ `uiErrors.ts`: mã lạ ⇒ lỗi chung có mã tham chiếu",
+  "mode": "Tự động – vitest + Testing Library trên jsdom, chạy riêng các test của case này",
+  "startedAt": "2026-11-02T12:16:19.307Z",
+  "finishedAt": "2026-11-02T12:16:20.645Z",
+  "steps": [
+    {
+      "n": 1,
+      "title": "`ánh xạ lỗi: mã lạ ⇒ lỗi chung có mã tham chiếu; lỗi trường không thử lại` (src/app/app.test.tsx)",
+      "expected": "Test đạt",
+      "actual": "passed (0.00 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/01-vitest.log"
+      ]
+    }
+  ],
+  "logs": [
+    "logs/01-vitest.log"
+  ],
+  "notes": [],
+  "env": {
+    "URL ứng dụng": "—",
+    "Bản build": "`6014765` (`origin/main`); mã trong `app/` giống hệt `c6e849b` — commit `6014765` chỉ thêm `CLAUDE.md` và `test_reports/`; không có thay đổi chưa commit trong `app/`",
+    "Máy chạy": "macOS 27.2 (arm64), Python 3.12.16, PyMuPDF 1.28.2, Node v26.12.1",
+    "CSDL": "PostgreSQL 17.11 (Homebrew) + pgvector 0.8.7; stack Docker dùng ảnh `pgvector/pgvector:pg17`",
+    "Docker": "Colima, Docker 29.5.2",
+    "Trình duyệt": "Không dùng — test web chạy trên jsdom (vitest); dự án chưa có Playwright (S8-08)",
+    "Thư mục chạy": "app/web"
+  },
+  "verdict": "ĐẠT"
+}

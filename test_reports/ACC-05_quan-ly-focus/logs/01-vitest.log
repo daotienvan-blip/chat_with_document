@@ -1,0 +1,15 @@
+$ npx vitest run src/app/app.test.tsx --reporter=verbose --reporter=junit -t 'hộp thoại xóa' --outputFile.junit=/Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/ACC-05_quan-ly-focus/logs/01-junit.xml
+# thư mục: app/web
+# bắt đầu 2026-11-02T12:16:14.111Z · kết thúc 2026-11-02T12:16:16.045Z · mã thoát 0
+
+
+ RUN  v2.1.9 /Users/daotienvan/Desktop/SDLC/chat_with_document/app/web
+
+ ✓ src/app/app.test.tsx > [US-005-AC1] hộp thoại xóa: focus vào Hủy, Esc đóng, xác nhận gọi DELETE
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 7 skipped (8)
+   Start at  19:16:14
+   Duration  1.13s (transform 117ms, setup 56ms, collect 210ms, tests 152ms, environment 314ms, prepare 56ms)
+
+JUNIT report written to /Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/ACC-05_quan-ly-focus/logs/01-junit.xml

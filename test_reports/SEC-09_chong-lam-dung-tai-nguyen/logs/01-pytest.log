@@ -1,0 +1,17 @@
+$ .venv/bin/pytest -o addopts= -p no:cacheprovider -p no:warnings -v -m "integration or not integration" tests/integration/test_flows.py::test_busy_and_rate_limit tests/unit/test_core_units.py::test_load_guard_busy_after_wait tests/unit/test_core_units.py::test_rate_limiter_bucket_and_recovery --junitxml=/Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/SEC-09_chong-lam-dung-tai-nguyen/logs/01-junit.xml
+# thư mục: app/server
+# bắt đầu 2026-11-02T12:16:02.536Z · kết thúc 2026-11-02T12:16:03.530Z · mã thoát 0
+
+============================= test session starts ==============================
+platform darwin -- Python 3.12.16, pytest-9.1.1, pluggy-1.7.0 -- /Users/daotienvan/Desktop/SDLC/chat_with_document/app/server/.venv/bin/python3.12
+rootdir: /Users/daotienvan/Desktop/SDLC/chat_with_document/app/server
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.15.1
+collecting ... collected 3 items
+
+tests/integration/test_flows.py::test_busy_and_rate_limit PASSED         [ 33%]
+tests/unit/test_core_units.py::test_load_guard_busy_after_wait PASSED    [ 66%]
+tests/unit/test_core_units.py::test_rate_limiter_bucket_and_recovery PASSED [100%]
+
+- generated xml file: /Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/SEC-09_chong-lam-dung-tai-nguyen/logs/01-junit.xml -
+============================== 3 passed in 0.54s ===============================

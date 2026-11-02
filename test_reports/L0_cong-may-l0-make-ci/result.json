@@ -1,0 +1,151 @@
+{
+  "id": "L0",
+  "title": "Cổng máy L0 (make ci)",
+  "folder": "L0_cong-may-l0-make-ci",
+  "planRef": "docs/07-verification/test-plan.md §6.1, §7",
+  "goal": null,
+  "mode": "Tự động – `make ci` (`app/deploy/ci-local.sh`, cùng các bước với `.github/workflows/ci.yml`) và GitHub Actions",
+  "startedAt": "2026-11-02T11:49:31.000Z",
+  "finishedAt": "2026-11-02T11:49:51.000Z",
+  "steps": [
+    {
+      "n": 1,
+      "title": "ruff",
+      "expected": "Không có lỗi lint",
+      "actual": "All checks passed!",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/l0-ci.log"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "mypy",
+      "expected": "Không có lỗi kiểu",
+      "actual": "Không lỗi trong 46 tệp nguồn",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/l0-ci.log"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "import-linter",
+      "expected": "Mọi hợp đồng phụ thuộc giữ",
+      "actual": "3 giữ, 0 vỡ",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/l0-ci.log"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "pytest unit+tích hợp, coverage ≥ 70%",
+      "expected": "100% test đạt; coverage ≥ 70%",
+      "actual": "81 đạt, 2 bỏ qua (2 test S3: runner không có SeaweedFS — đã chạy ở REG-02); coverage 81.50%",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/l0-ci.log"
+      ]
+    },
+    {
+      "n": 5,
+      "title": "tsc",
+      "expected": "Không có lỗi kiểu",
+      "actual": "Không lỗi",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/l0-ci.log"
+      ]
+    },
+    {
+      "n": 6,
+      "title": "vitest + coverage ≥ 70%",
+      "expected": "100% test đạt; coverage ≥ 70%",
+      "actual": "8/8 đạt; dòng 80.55%",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/l0-ci.log"
+      ]
+    },
+    {
+      "n": 7,
+      "title": "vite build",
+      "expected": "Build thành công",
+      "actual": "Build thành công",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/l0-ci.log"
+      ]
+    },
+    {
+      "n": 8,
+      "title": "gitleaks (lịch sử git)",
+      "expected": "0 bí mật",
+      "actual": "no leaks found (12 commit)",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/l0-ci.log"
+      ]
+    },
+    {
+      "n": 9,
+      "title": "docker build server",
+      "expected": "Build ảnh thành công",
+      "actual": "sha256:c3cd71a921d5…",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/l0-ci.log"
+      ]
+    },
+    {
+      "n": 10,
+      "title": "docker build web",
+      "expected": "Build ảnh thành công",
+      "actual": "sha256:5e81e4feed3a…",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/l0-ci.log"
+      ]
+    },
+    {
+      "n": 11,
+      "title": "Tổng thời gian L0",
+      "expected": "≤ 600 s",
+      "actual": "20 s",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/l0-ci.log"
+      ]
+    },
+    {
+      "n": 12,
+      "title": "CI trên GitHub Actions (ubuntu-24.04 x86_64), commit `6014765`",
+      "expected": "4/4 job xanh",
+      "actual": "4/4 job success — secret scan (gitleaks), server · lint + type + test + coverage, web · type + test + coverage, build ảnh Docker",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/l0-github-actions.json"
+      ]
+    }
+  ],
+  "logs": [
+    "../_logs/l0-ci.log",
+    "../_logs/l0-server-junit.xml",
+    "../_logs/l0-github-actions.json"
+  ],
+  "notes": [
+    "Bước 1–11: L0 cục bộ trên macOS arm64, chạy trên `c6e849b` lúc 18:49 (UTC+7). Bước 12: CI trên GitHub cho `6014765` (https://github.com/daotienvan-blip/chat_with_document/actions/runs/41442350109), có cùng mã `app/`.",
+    "`6014765` được push thẳng lên `main` lúc 19:09 (UTC+7), không qua pull request. Đây là lượt CI xanh đầu tiên trên `main` sau sự cố PyMuPDF 2.0 (INC-2026-10-28-01).",
+    "Build ảnh Docker cục bộ dùng lại lớp cache từ lần build trước cùng mã nguồn, nên mất 0–1 s."
+  ],
+  "env": {
+    "URL ứng dụng": "—",
+    "Bản build": "`6014765` (`origin/main`); mã trong `app/` giống hệt `c6e849b` — commit `6014765` chỉ thêm `CLAUDE.md` và `test_reports/`; không có thay đổi chưa commit trong `app/`",
+    "Máy chạy": "macOS 27.2 (arm64), Python 3.12.16, PyMuPDF 1.28.2, Node v26.12.1",
+    "CSDL": "PostgreSQL 17.11 (Homebrew) + pgvector 0.8.7; stack Docker dùng ảnh `pgvector/pgvector:pg17`",
+    "Docker": "Colima, Docker 29.5.2",
+    "Trình duyệt": "Không dùng — test web chạy trên jsdom (vitest); dự án chưa có Playwright (S8-08)"
+  },
+  "verdict": "ĐẠT"
+}

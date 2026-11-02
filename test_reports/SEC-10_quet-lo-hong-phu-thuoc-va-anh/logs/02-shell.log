@@ -1,0 +1,5 @@
+$ npm audit --omit=dev --audit-level=high
+# thư mục: app/web
+# bắt đầu 2026-11-02T12:16:04.798Z · kết thúc 2026-11-02T12:16:05.453Z · mã thoát 0
+
+found 0 vulnerabilities

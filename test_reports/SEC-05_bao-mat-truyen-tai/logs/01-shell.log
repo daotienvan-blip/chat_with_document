@@ -1,0 +1,37 @@
+$ ok=1
+for p in / /api/v1/config; do
+  H=$(curl -sS -D - -o /dev/null --cacert var/prod-local/certs/tls.crt "https://localhost:8443$p" | tr -d '\r')
+  echo "== GET $p"; echo "$H"
+  grep -qi '^strict-transport-security:' <<<"$H" || ok=0
+done
+[[ $ok == 1 ]] && echo "Có Strict-Transport-Security" || { echo "KHÔNG có tiêu đề Strict-Transport-Security"; exit 1; }
+# thư mục: app
+# bắt đầu 2026-11-02T12:13:58.703Z · kết thúc 2026-11-02T12:13:58.781Z · mã thoát 1
+
+== GET /
+HTTP/1.1 200 OK
+Server: nginx
+Date: Mon, 02 Nov 2026 12:13:58 GMT
+Content-Type: text/html
+Content-Length: 405
+Last-Modified: Tue, 27 Oct 2026 11:33:14 GMT
+Connection: keep-alive
+ETag: "6ae08bfa-195"
+Content-Security-Policy: default-src 'self'; frame-ancestors 'none'
+X-Content-Type-Options: nosniff
+Referrer-Policy: no-referrer
+Accept-Ranges: bytes
+== GET /api/v1/config
+HTTP/1.1 200 OK
+Server: nginx
+Date: Mon, 02 Nov 2026 12:13:58 GMT
+Content-Type: application/json
+Content-Length: 85
+Connection: keep-alive
+cache-control: no-store
+x-request-id: 13c5e79fa543519596029a08488e5759
+x-content-type-options: nosniff
+Content-Security-Policy: default-src 'self'; frame-ancestors 'none'
+X-Content-Type-Options: nosniff
+Referrer-Policy: no-referrer
+KHÔNG có tiêu đề Strict-Transport-Security

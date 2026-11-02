@@ -1,0 +1,47 @@
+{
+  "id": "SEC-07",
+  "title": "Bí mật",
+  "folder": "SEC-07_bi-mat",
+  "planRef": "docs/07-verification/test-plan.md §6.9",
+  "goal": "gitleaks toàn bộ lịch sử git; bí mật chỉ nằm trong tệp bị gitignore ⇒ 0 phát hiện",
+  "mode": "Tự động – lệnh kiểm tra (xem log)",
+  "startedAt": "2026-11-02T12:13:58.782Z",
+  "finishedAt": "2026-11-02T12:13:59.112Z",
+  "steps": [
+    {
+      "n": 1,
+      "title": "gitleaks toàn bộ lịch sử git",
+      "expected": "Không phát hiện bí mật",
+      "actual": "Mã thoát 0: 7:13PM INF 13 commits scanned.; 7:13PM INF no leaks found",
+      "status": "Đạt",
+      "evidence": [
+        "logs/01-shell.log"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "Tệp chứa bí mật nằm ngoài git",
+      "expected": "3/3 tệp bị gitignore, 0 tệp được theo dõi",
+      "actual": "Mã thoát 0: Tệp chứa bí mật bị gitignore: 3/3; đang được git theo dõi: 0",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-shell.log"
+      ]
+    }
+  ],
+  "logs": [
+    "logs/01-shell.log",
+    "logs/02-shell.log"
+  ],
+  "notes": [],
+  "env": {
+    "URL ứng dụng": "—",
+    "Bản build": "`6014765` (`origin/main`); mã trong `app/` giống hệt `c6e849b` — commit `6014765` chỉ thêm `CLAUDE.md` và `test_reports/`; không có thay đổi chưa commit trong `app/`",
+    "Máy chạy": "macOS 27.2 (arm64), Python 3.12.16, PyMuPDF 1.28.2, Node v26.12.1",
+    "CSDL": "PostgreSQL 17.11 (Homebrew) + pgvector 0.8.7; stack Docker dùng ảnh `pgvector/pgvector:pg17`",
+    "Docker": "Colima, Docker 29.5.2",
+    "Trình duyệt": "Không dùng — test web chạy trên jsdom (vitest); dự án chưa có Playwright (S8-08)",
+    "Thư mục chạy": "."
+  },
+  "verdict": "ĐẠT"
+}

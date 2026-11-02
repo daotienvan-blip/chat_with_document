@@ -1,0 +1,70 @@
+{
+  "id": "SEC-10",
+  "title": "Quét lỗ hổng phụ thuộc và ảnh",
+  "folder": "SEC-10_quet-lo-hong-phu-thuoc-va-anh",
+  "planRef": "docs/07-verification/test-plan.md §6.9",
+  "goal": "`pip-audit`, `npm audit`, quét ảnh ⇒ 0 lỗ hổng mức high/critical (G9)",
+  "mode": "Tự động – lệnh kiểm tra (xem log)",
+  "startedAt": "2026-11-02T12:16:03.531Z",
+  "finishedAt": "2026-11-02T12:16:14.108Z",
+  "steps": [
+    {
+      "n": 1,
+      "title": "npm audit (web, mọi phụ thuộc kể cả dev)",
+      "expected": "0 lỗ hổng mức high/critical",
+      "actual": "Mã thoát 1: 12 vulnerabilities (8 moderate, 1 high, 3 critical)",
+      "status": "Không đạt",
+      "evidence": [
+        "logs/01-shell.log"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "npm audit (web, chỉ phụ thuộc runtime)",
+      "expected": "0 lỗ hổng mức high/critical",
+      "actual": "Mã thoát 0: found 0 vulnerabilities",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-shell.log"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "pip-audit (server, phụ thuộc đã cài trong .venv)",
+      "expected": "0 lỗ hổng đã biết",
+      "actual": "Mã thoát 0: No known vulnerabilities found",
+      "status": "Đạt",
+      "evidence": [
+        "logs/04-shell.log"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Quét lỗ hổng ảnh Docker (`cwd-server`, `cwd-web`)",
+      "expected": "0 mức high/critical",
+      "actual": "Chưa chạy: máy chưa có công cụ quét ảnh (trivy hoặc grype); agent không tự cài công cụ hệ thống.",
+      "status": "Bị chặn",
+      "evidence": []
+    }
+  ],
+  "logs": [
+    "logs/01-shell.log",
+    "logs/02-shell.log",
+    "logs/03-setup.log",
+    "logs/04-shell.log"
+  ],
+  "notes": [
+    "pip-audit được cài vào một venv tạm ngoài dự án; không đổi `.venv` của dự án.",
+    "**Lỗi mới DEF-006:** 12 lỗ hổng trong phụ thuộc dev của web (8 moderate, 1 high, 3 critical) — vitest, vite, esbuild, tinypool, glob, minimatch. Phụ thuộc runtime: 0. Bản sửa cần nâng phiên bản chính (vitest 5, vite 8) — xem README."
+  ],
+  "env": {
+    "URL ứng dụng": "—",
+    "Bản build": "`6014765` (`origin/main`); mã trong `app/` giống hệt `c6e849b` — commit `6014765` chỉ thêm `CLAUDE.md` và `test_reports/`; không có thay đổi chưa commit trong `app/`",
+    "Máy chạy": "macOS 27.2 (arm64), Python 3.12.16, PyMuPDF 1.28.2, Node v26.12.1",
+    "CSDL": "PostgreSQL 17.11 (Homebrew) + pgvector 0.8.7; stack Docker dùng ảnh `pgvector/pgvector:pg17`",
+    "Docker": "Colima, Docker 29.5.2",
+    "Trình duyệt": "Không dùng — test web chạy trên jsdom (vitest); dự án chưa có Playwright (S8-08)",
+    "Thư mục chạy": "app/server; app/web"
+  },
+  "verdict": "KHÔNG ĐẠT"
+}

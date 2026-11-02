@@ -1,0 +1,22 @@
+$ fail=0
+for c in cwd-prod-api-1 cwd-prod-api-2 cwd-prod-worker-1 cwd-prod-proxy-1; do
+  u=$(docker inspect -f '{{.Config.User}}' $c); ro=$(docker inspect -f '{{.HostConfig.ReadonlyRootfs}}' $c)
+  so=$(docker inspect -f '{{.HostConfig.SecurityOpt}}' $c)
+  echo "$c: user=$u read_only=$ro security_opt=$so"
+  [[ -n "$u" && "$u" != root && "$u" != 0 ]] || { echo "  ✗ chạy bằng root"; fail=1; }
+  [[ "$ro" == true ]] || { echo "  ✗ không read_only"; fail=1; }
+  [[ "$so" == *no-new-privileges:true* ]] || { echo "  ✗ thiếu no-new-privileges"; fail=1; }
+done
+for n in $(docker inspect -f '{{range $k, $v := .NetworkSettings.Networks}}{{$k}} {{end}}' cwd-prod-worker-1); do
+  i=$(docker network inspect -f '{{.Internal}}' $n); echo "worker nối mạng $n: internal=$i"
+  [[ "$i" == true ]] || { echo "  ✗ worker có đường ra ngoài qua $n"; fail=1; }
+done
+exit $fail
+# thư mục: app
+# bắt đầu 2026-11-02T12:13:59.113Z · kết thúc 2026-11-02T12:13:59.424Z · mã thoát 0
+
+cwd-prod-api-1: user=10001 read_only=true security_opt=[no-new-privileges:true]
+cwd-prod-api-2: user=10001 read_only=true security_opt=[no-new-privileges:true]
+cwd-prod-worker-1: user=10001 read_only=true security_opt=[no-new-privileges:true]
+cwd-prod-proxy-1: user=101 read_only=true security_opt=[no-new-privileges:true]
+worker nối mạng cwd-prod_data: internal=true

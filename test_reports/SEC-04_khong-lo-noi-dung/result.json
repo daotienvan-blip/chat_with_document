@@ -1,0 +1,38 @@
+{
+  "id": "SEC-04",
+  "title": "Không lộ nội dung",
+  "folder": "SEC-04_khong-lo-noi-dung",
+  "planRef": "docs/07-verification/test-plan.md §6.9",
+  "goal": "Log chỉ có trường cho phép; lỗi trả problem+json không lộ chi tiết nội bộ",
+  "mode": "Tự động – pytest, chạy riêng các test của case này",
+  "startedAt": "2026-11-02T12:16:01.387Z",
+  "finishedAt": "2026-11-02T12:16:02.535Z",
+  "steps": [
+    {
+      "n": 1,
+      "title": "`test_observability_no_content_leak` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.43 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/01-pytest.log"
+      ]
+    }
+  ],
+  "logs": [
+    "logs/01-pytest.log"
+  ],
+  "notes": [
+    "Giới hạn đã biết (F-10 trong `review-record.md`): test bắt log qua `caplog` nên không kiểm định dạng log thật ở stdout."
+  ],
+  "env": {
+    "URL ứng dụng": "—",
+    "Bản build": "`6014765` (`origin/main`); mã trong `app/` giống hệt `c6e849b` — commit `6014765` chỉ thêm `CLAUDE.md` và `test_reports/`; không có thay đổi chưa commit trong `app/`",
+    "Máy chạy": "macOS 27.2 (arm64), Python 3.12.16, PyMuPDF 1.28.2, Node v26.12.1",
+    "CSDL": "PostgreSQL 17.11 (Homebrew) + pgvector 0.8.7; stack Docker dùng ảnh `pgvector/pgvector:pg17`",
+    "Docker": "Colima, Docker 29.5.2",
+    "Trình duyệt": "Không dùng — test web chạy trên jsdom (vitest); dự án chưa có Playwright (S8-08)",
+    "Thư mục chạy": "app/server"
+  },
+  "verdict": "ĐẠT"
+}

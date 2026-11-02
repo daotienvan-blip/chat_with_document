@@ -1,0 +1,19 @@
+$ npx vitest run src/app/app.test.tsx --reporter=verbose --reporter=junit -t 'kho trống|trạng thái có chữ|hỏi, hiển thị nguồn|không tìm thấy và trả lời một phần|lỗi AI giữ câu hỏi' --outputFile.junit=/Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/UI-03_trang-thai-thanh-phan/logs/01-junit.xml
+# thư mục: app/web
+# bắt đầu 2026-11-02T12:16:17.538Z · kết thúc 2026-11-02T12:16:19.306Z · mã thoát 0
+
+
+ RUN  v2.1.9 /Users/daotienvan/Desktop/SDLC/chat_with_document/app/web
+
+ ✓ src/app/app.test.tsx > [US-006-AC2] kho trống: hướng dẫn tải và khóa khung hỏi
+ ✓ src/app/app.test.tsx > [US-002-AC2][US-003-AC2] trạng thái có chữ, lý do lỗi và tài liệu chưa sẵn sàng
+ ✓ src/app/app.test.tsx > [US-006-AC1][US-007-AC1][US-008-AC1] hỏi, hiển thị nguồn dạng chip mở đúng trang; giữ qua tải lại
+ ✓ src/app/app.test.tsx > [US-010-AC1][US-010-AC2] không tìm thấy và trả lời một phần có kiểu hiển thị riêng
+ ✓ src/app/app.test.tsx > [EC-07] lỗi AI giữ câu hỏi, đếm ngược Retry-After rồi gửi lại
+
+ Test Files  1 passed (1)
+      Tests  5 passed | 3 skipped (8)
+   Start at  19:16:18
+   Duration  1.21s (transform 81ms, setup 35ms, collect 134ms, tests 459ms, environment 186ms, prepare 42ms)
+
+JUNIT report written to /Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/UI-03_trang-thai-thanh-phan/logs/01-junit.xml

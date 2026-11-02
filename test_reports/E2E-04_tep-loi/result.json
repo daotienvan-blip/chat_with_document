@@ -1,0 +1,63 @@
+{
+  "id": "E2E-04",
+  "title": "Tệp lỗi",
+  "folder": "E2E-04_tep-loi",
+  "planRef": "docs/07-verification/test-plan.md §6.5",
+  "goal": null,
+  "mode": "Bán tự động – `smoke.py` (HTTP) + test thành phần web; bước trình duyệt chưa chạy",
+  "startedAt": "2026-11-02T11:51:27.101Z",
+  "finishedAt": "2026-11-02T11:51:29.894Z",
+  "steps": [
+    {
+      "n": 1,
+      "title": "Tải PDF có mật khẩu",
+      "expected": "Thất bại với lý do FILE_ENCRYPTED",
+      "actual": "PDF có mật khẩu → FILE_ENCRYPTED",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg03-smoke.log"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "Tải tệp .txt",
+      "expected": "400 UNSUPPORTED_TYPE",
+      "actual": "tệp không phải PDF → 400 UNSUPPORTED_TYPE",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg03-smoke.log"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "Tệp bị từ chối không tạo dòng; lý do lỗi có chữ (test thành phần web)",
+      "expected": "Đạt",
+      "actual": "`[US-001-AC3]`, `[US-002-AC2][US-003-AC2]` đạt ở REG-01",
+      "status": "Đạt",
+      "evidence": [
+        "../REG-01_hoi-quy-don-vi-server-va-web/logs/02-vitest.log"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Lặp lại trên trình duyệt thật",
+      "expected": "Lý do lỗi + hướng xử lý; tệp .txt không tạo dòng",
+      "actual": "Chưa chạy trên trình duyệt thật: dự án chưa có Playwright (S8-08). Cần người kiểm thử mở ứng dụng và xác nhận.",
+      "status": "Cần người xác nhận",
+      "evidence": []
+    }
+  ],
+  "logs": [
+    "../_logs/reg03-smoke.log"
+  ],
+  "notes": [],
+  "env": {
+    "URL ứng dụng": "http://localhost:8010 — bản api + worker riêng cho lượt này: CSDL `cwd_smoke`, kho tệp riêng, `LLM_PROVIDER=extractive`",
+    "Bản build": "`6014765` (`origin/main`); mã trong `app/` giống hệt `c6e849b` — commit `6014765` chỉ thêm `CLAUDE.md` và `test_reports/`; không có thay đổi chưa commit trong `app/`",
+    "Máy chạy": "macOS 27.2 (arm64), Python 3.12.16, PyMuPDF 1.28.2, Node v26.12.1",
+    "CSDL": "PostgreSQL 17.11 (Homebrew) + pgvector 0.8.7; stack Docker dùng ảnh `pgvector/pgvector:pg17`",
+    "Docker": "Colima, Docker 29.5.2",
+    "Trình duyệt": "Không dùng — test web chạy trên jsdom (vitest); dự án chưa có Playwright (S8-08)"
+  },
+  "verdict": "CẦN NGƯỜI XÁC NHẬN"
+}

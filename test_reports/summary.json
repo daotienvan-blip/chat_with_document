@@ -1,0 +1,283 @@
+{
+  "generatedAt": "2026-11-02T12:20:02.374Z",
+  "build": "c6e849b",
+  "count": {
+    "KHÔNG ĐẠT": 3,
+    "BỊ CHẶN": 15,
+    "CẦN NGƯỜI XÁC NHẬN": 7,
+    "ĐẠT": 29
+  },
+  "total": 54,
+  "rows": [
+    {
+      "id": "L0",
+      "verdict": "ĐẠT",
+      "folder": "L0_cong-may-l0-make-ci"
+    },
+    {
+      "id": "REG-01",
+      "verdict": "ĐẠT",
+      "folder": "REG-01_hoi-quy-don-vi-server-va-web"
+    },
+    {
+      "id": "REG-02",
+      "verdict": "ĐẠT",
+      "folder": "REG-02_hoi-quy-tich-hop-va-hop-dong-api"
+    },
+    {
+      "id": "REG-03",
+      "verdict": "ĐẠT",
+      "folder": "REG-03_khoi-dau-cuoi"
+    },
+    {
+      "id": "REG-04",
+      "verdict": "KHÔNG ĐẠT",
+      "folder": "REG-04_proxy-va-nang-cap-cuon-chieu"
+    },
+    {
+      "id": "REG-05",
+      "verdict": "ĐẠT",
+      "folder": "REG-05_danh-gia-ai-g4-g5"
+    },
+    {
+      "id": "API-01",
+      "verdict": "ĐẠT",
+      "folder": "API-01_tai-len-tai-lieu-hop-le"
+    },
+    {
+      "id": "API-02",
+      "verdict": "ĐẠT",
+      "folder": "API-02_tai-len-bi-tu-choi"
+    },
+    {
+      "id": "API-03",
+      "verdict": "ĐẠT",
+      "folder": "API-03_tai-len-nguyen-tu-khi-kho-hoac-csdl-loi"
+    },
+    {
+      "id": "API-04",
+      "verdict": "ĐẠT",
+      "folder": "API-04_danh-sach-tai-lieu"
+    },
+    {
+      "id": "API-05",
+      "verdict": "ĐẠT",
+      "folder": "API-05_tai-tep-goc"
+    },
+    {
+      "id": "API-06",
+      "verdict": "ĐẠT",
+      "folder": "API-06_xoa-tai-lieu-bat-bien"
+    },
+    {
+      "id": "API-07",
+      "verdict": "ĐẠT",
+      "folder": "API-07_hoi-co-can-cu-kem-nguon"
+    },
+    {
+      "id": "API-08",
+      "verdict": "ĐẠT",
+      "folder": "API-08_cau-hoi-khong-hop-le"
+    },
+    {
+      "id": "API-09",
+      "verdict": "ĐẠT",
+      "folder": "API-09_loi-dich-vu-ai"
+    },
+    {
+      "id": "API-10",
+      "verdict": "ĐẠT",
+      "folder": "API-10_chiu-tai"
+    },
+    {
+      "id": "API-11",
+      "verdict": "ĐẠT",
+      "folder": "API-11_readyz-voi-vai-tro-toi-thieu"
+    },
+    {
+      "id": "E2E-01",
+      "verdict": "CẦN NGƯỜI XÁC NHẬN",
+      "folder": "E2E-01_tai-cho-san-sang-hoi"
+    },
+    {
+      "id": "E2E-02",
+      "verdict": "CẦN NGƯỜI XÁC NHẬN",
+      "folder": "E2E-02_hoi-tren-nhieu-tai-lieu"
+    },
+    {
+      "id": "E2E-03",
+      "verdict": "CẦN NGƯỜI XÁC NHẬN",
+      "folder": "E2E-03_cau-hoi-ngoai-tai-lieu"
+    },
+    {
+      "id": "E2E-04",
+      "verdict": "CẦN NGƯỜI XÁC NHẬN",
+      "folder": "E2E-04_tep-loi"
+    },
+    {
+      "id": "E2E-05",
+      "verdict": "CẦN NGƯỜI XÁC NHẬN",
+      "folder": "E2E-05_xoa-tai-lieu-roi-hoi-lai"
+    },
+    {
+      "id": "E2E-06",
+      "verdict": "BỊ CHẶN",
+      "folder": "E2E-06_lap-e2e-qua-proxy-tls"
+    },
+    {
+      "id": "E2E-07",
+      "verdict": "BỊ CHẶN",
+      "folder": "E2E-07_dung-tren-dien-thoai"
+    },
+    {
+      "id": "UAT-01",
+      "verdict": "BỊ CHẶN",
+      "folder": "UAT-01_nguoi-dung-tu-tai-tai-lieu-that"
+    },
+    {
+      "id": "UAT-02",
+      "verdict": "BỊ CHẶN",
+      "folder": "UAT-02_hai-muoi-cau-hoi-that"
+    },
+    {
+      "id": "UAT-03",
+      "verdict": "BỊ CHẶN",
+      "folder": "UAT-03_cau-ngoai-tai-lieu-do-nguoi-dung-dat"
+    },
+    {
+      "id": "UAT-04",
+      "verdict": "BỊ CHẶN",
+      "folder": "UAT-04_cau-hoi-can-ghep-nhieu-tai-lieu"
+    },
+    {
+      "id": "UAT-05",
+      "verdict": "BỊ CHẶN",
+      "folder": "UAT-05_so-thao-tac-so-voi-cach-thu-cong"
+    },
+    {
+      "id": "PERF-01",
+      "verdict": "ĐẠT",
+      "folder": "PERF-01_do-tre-truy-xuat-vector"
+    },
+    {
+      "id": "PERF-02",
+      "verdict": "ĐẠT",
+      "folder": "PERF-02_tai-tep-lon-trong-luc-nang-cap"
+    },
+    {
+      "id": "PERF-03",
+      "verdict": "BỊ CHẶN",
+      "folder": "PERF-03_nguoi-dung-dong-thoi"
+    },
+    {
+      "id": "PERF-04",
+      "verdict": "BỊ CHẶN",
+      "folder": "PERF-04_thoi-gian-tai-lieu-san-sang"
+    },
+    {
+      "id": "PERF-05",
+      "verdict": "ĐẠT",
+      "folder": "PERF-05_thoi-gian-build-ci"
+    },
+    {
+      "id": "SEC-01",
+      "verdict": "ĐẠT",
+      "folder": "SEC-01_tep-tai-len-khong-tin-cay"
+    },
+    {
+      "id": "SEC-02",
+      "verdict": "ĐẠT",
+      "folder": "SEC-02_chong-injection"
+    },
+    {
+      "id": "SEC-03",
+      "verdict": "ĐẠT",
+      "folder": "SEC-03_phan-quyen-csdl-toi-thieu"
+    },
+    {
+      "id": "SEC-04",
+      "verdict": "ĐẠT",
+      "folder": "SEC-04_khong-lo-noi-dung"
+    },
+    {
+      "id": "SEC-05",
+      "verdict": "KHÔNG ĐẠT",
+      "folder": "SEC-05_bao-mat-truyen-tai"
+    },
+    {
+      "id": "SEC-06",
+      "verdict": "ĐẠT",
+      "folder": "SEC-06_kiem-soat-truy-cap-mang"
+    },
+    {
+      "id": "SEC-07",
+      "verdict": "ĐẠT",
+      "folder": "SEC-07_bi-mat"
+    },
+    {
+      "id": "SEC-08",
+      "verdict": "ĐẠT",
+      "folder": "SEC-08_cau-hinh-container"
+    },
+    {
+      "id": "SEC-09",
+      "verdict": "ĐẠT",
+      "folder": "SEC-09_chong-lam-dung-tai-nguyen"
+    },
+    {
+      "id": "SEC-10",
+      "verdict": "KHÔNG ĐẠT",
+      "folder": "SEC-10_quet-lo-hong-phu-thuoc-va-anh"
+    },
+    {
+      "id": "ACC-01",
+      "verdict": "BỊ CHẶN",
+      "folder": "ACC-01_dung-bang-ban-phim"
+    },
+    {
+      "id": "ACC-02",
+      "verdict": "BỊ CHẶN",
+      "folder": "ACC-02_trinh-doc-man-hinh"
+    },
+    {
+      "id": "ACC-03",
+      "verdict": "BỊ CHẶN",
+      "folder": "ACC-03_do-tuong-phan"
+    },
+    {
+      "id": "ACC-04",
+      "verdict": "BỊ CHẶN",
+      "folder": "ACC-04_thuoc-tinh-aria"
+    },
+    {
+      "id": "ACC-05",
+      "verdict": "CẦN NGƯỜI XÁC NHẬN",
+      "folder": "ACC-05_quan-ly-focus"
+    },
+    {
+      "id": "ACC-06",
+      "verdict": "ĐẠT",
+      "folder": "ACC-06_thong-bao-loi-khong-chi-bang-mau"
+    },
+    {
+      "id": "UI-01",
+      "verdict": "BỊ CHẶN",
+      "folder": "UI-01_so-sanh-voi-thiet-ke"
+    },
+    {
+      "id": "UI-02",
+      "verdict": "BỊ CHẶN",
+      "folder": "UI-02_dap-ung-320-den-1440-px"
+    },
+    {
+      "id": "UI-03",
+      "verdict": "CẦN NGƯỜI XÁC NHẬN",
+      "folder": "UI-03_trang-thai-thanh-phan"
+    },
+    {
+      "id": "UI-04",
+      "verdict": "ĐẠT",
+      "folder": "UI-04_anh-xa-loi"
+    }
+  ]
+}

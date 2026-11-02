@@ -1,0 +1,99 @@
+{
+  "id": "SEC-05",
+  "title": "Bảo mật truyền tải",
+  "folder": "SEC-05_bao-mat-truyen-tai",
+  "planRef": "docs/07-verification/test-plan.md §6.9",
+  "goal": "TLS ≥ 1.2, HSTS, CSP, nosniff, no-referrer, `server_tokens off`",
+  "mode": "Tự động – lệnh kiểm tra (xem log)",
+  "startedAt": "2026-11-02T12:13:58.703Z",
+  "finishedAt": "2026-11-02T12:13:58.781Z",
+  "steps": [
+    {
+      "n": 1,
+      "title": "TLS 1.2+ được chấp nhận",
+      "expected": "Kết nối thành công",
+      "actual": "TLS 1.2+ được chấp nhận",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "TLS 1.1 bị từ chối",
+      "expected": "Kết nối thất bại",
+      "actual": "TLS 1.1 bị từ chối",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "CSP",
+      "expected": "default-src 'self'; frame-ancestors 'none'",
+      "actual": "CSP default-src 'self'; frame-ancestors 'none'",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "X-Content-Type-Options",
+      "expected": "nosniff",
+      "actual": "X-Content-Type-Options: nosniff",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 5,
+      "title": "Referrer-Policy",
+      "expected": "no-referrer",
+      "actual": "Referrer-Policy: no-referrer",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 6,
+      "title": "`server_tokens off`",
+      "expected": "Tiêu đề Server không có số phiên bản",
+      "actual": "Server không lộ phiên bản (Server: nginx)",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 7,
+      "title": "Tiêu đề HSTS qua proxy",
+      "expected": "Có tiêu đề Strict-Transport-Security",
+      "actual": "Mã thoát 1: KHÔNG có tiêu đề Strict-Transport-Security",
+      "status": "Không đạt",
+      "evidence": [
+        "logs/01-shell.log"
+      ]
+    }
+  ],
+  "logs": [
+    "../_logs/reg04-proxy-test.log",
+    "logs/01-shell.log"
+  ],
+  "notes": [
+    "**Lỗi mới DEF-005:** proxy không gửi `Strict-Transport-Security`. `proxy-test.sh` không kiểm HSTS nên REG-04 vẫn 15/15 — xem README, mục Lỗi phát hiện."
+  ],
+  "env": {
+    "URL ứng dụng": "https://localhost:8443",
+    "Bản build": "`6014765` (`origin/main`); mã trong `app/` giống hệt `c6e849b` — commit `6014765` chỉ thêm `CLAUDE.md` và `test_reports/`; không có thay đổi chưa commit trong `app/`",
+    "Máy chạy": "macOS 27.2 (arm64), Python 3.12.16, PyMuPDF 1.28.2, Node v26.12.1",
+    "CSDL": "PostgreSQL 17.11 (Homebrew) + pgvector 0.8.7; stack Docker dùng ảnh `pgvector/pgvector:pg17`",
+    "Docker": "Colima, Docker 29.5.2",
+    "Trình duyệt": "Không dùng — test web chạy trên jsdom (vitest); dự án chưa có Playwright (S8-08)",
+    "Thư mục chạy": "app"
+  },
+  "verdict": "KHÔNG ĐẠT"
+}

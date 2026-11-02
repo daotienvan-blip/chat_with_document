@@ -1,0 +1,18 @@
+start 2026-11-02T12:06:53Z
+$ DATABASE_URL=postgresql+psycopg:///cwd_spike EMBEDDING_DIM=384 alembic upgrade head
+$ python scripts/spike_hnsw.py --db postgresql+psycopg:///cwd_spike --n 40000
+nạp 40000 đoạn (384 chiều) trong 417.0s
+
+PostgreSQL 17.11 (Homebrew), pgvector 0.8.7, 40000 đoạn, 200 tài liệu (10% processing, 10% đã xóa), 100 truy vấn
+
+| Chế độ | ef_search | Quét lặp | p50 ms | p95 ms | Dòng trả về (min/TB) | Recall@20 so với exact |
+|---|---|---|---|---|---|---|
+| exact | — | không | 25.5 | 28.9 | 20/20.0 | 1.000 |
+| hnsw | 40 | không | 2.3 | 20.0 | 20/20.0 | 0.114 |
+| hnsw | 100 | không | 3.5 | 4.2 | 20/20.0 | 0.245 |
+| hnsw | 200 | không | 5.8 | 6.4 | 20/20.0 | 0.391 |
+| hnsw | 40 | có | 1.8 | 2.5 | 20/20.0 | 0.114 |
+| hnsw | 100 | có | 3.9 | 4.8 | 20/20.0 | 0.245 |
+exit=0
+end 2026-11-02T12:13:56Z
+đã xóa CSDL cwd_spike

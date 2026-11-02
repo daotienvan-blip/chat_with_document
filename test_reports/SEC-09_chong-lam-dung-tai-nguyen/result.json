@@ -1,0 +1,87 @@
+{
+  "id": "SEC-09",
+  "title": "Chống lạm dụng tài nguyên",
+  "folder": "SEC-09_chong-lam-dung-tai-nguyen",
+  "planRef": "docs/07-verification/test-plan.md §6.9",
+  "goal": "Giới hạn tốc độ, LoadGuard, giới hạn kích thước thân yêu cầu ⇒ 429/503/413",
+  "mode": "Tự động – pytest, chạy riêng các test của case này",
+  "startedAt": "2026-11-02T12:16:02.536Z",
+  "finishedAt": "2026-11-02T12:16:03.530Z",
+  "steps": [
+    {
+      "n": 1,
+      "title": "`test_busy_and_rate_limit` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.30 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/01-pytest.log"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "`test_load_guard_busy_after_wait` (unit/test_core_units)",
+      "expected": "Test đạt",
+      "actual": "passed (0.05 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/01-pytest.log"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "`test_rate_limiter_bucket_and_recovery` (unit/test_core_units)",
+      "expected": "Test đạt",
+      "actual": "passed (0.00 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/01-pytest.log"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Thân yêu cầu quá lớn qua proxy",
+      "expected": "413 FILE_TOO_LARGE problem+json",
+      "actual": "413 → problem+json FILE_TOO_LARGE có requestId",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 5,
+      "title": "Vượt hạn mức câu hỏi qua proxy",
+      "expected": "429 RATE_LIMITED, có Retry-After",
+      "actual": "429 sau 6 yêu cầu → problem+json RATE_LIMITED, có Retry-After",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 6,
+      "title": "Câu hỏi 100 KB qua proxy",
+      "expected": "400 QUESTION_TOO_LONG",
+      "actual": "câu hỏi 100 KB → proxy trả 400 QUESTION_TOO_LONG problem+json",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    }
+  ],
+  "logs": [
+    "logs/01-pytest.log",
+    "../_logs/reg04-proxy-test.log"
+  ],
+  "notes": [],
+  "env": {
+    "URL ứng dụng": "—",
+    "Bản build": "`6014765` (`origin/main`); mã trong `app/` giống hệt `c6e849b` — commit `6014765` chỉ thêm `CLAUDE.md` và `test_reports/`; không có thay đổi chưa commit trong `app/`",
+    "Máy chạy": "macOS 27.2 (arm64), Python 3.12.16, PyMuPDF 1.28.2, Node v26.12.1",
+    "CSDL": "PostgreSQL 17.11 (Homebrew) + pgvector 0.8.7; stack Docker dùng ảnh `pgvector/pgvector:pg17`",
+    "Docker": "Colima, Docker 29.5.2",
+    "Trình duyệt": "Không dùng — test web chạy trên jsdom (vitest); dự án chưa có Playwright (S8-08)",
+    "Thư mục chạy": "app/server"
+  },
+  "verdict": "ĐẠT"
+}

@@ -1,0 +1,14 @@
+Tệp mẫu: 21008324 byte
+A. Qua proxy, dừng cwd-prod-api-1 giữa lúc tải
+  ✓ trong lúc api-1 tắt: yêu cầu mới thành công 10/10
+  ✓ yêu cầu đang chạy hoàn tất: HTTP 200, đúng sha256
+  ✓ api-1 thoát mã 0
+B. Gọi thẳng cwd-prod-api-2 bằng client đọc chậm, SIGTERM giữa chừng
+  (api-2 nhận SIGTERM, thoát sau 5 s; client nhận  byte)
+  ✗ yêu cầu đang chạy hoàn tất khi api nhận SIGTERM: HTTP , đủ byte, đúng sha256
+  ✓ api-2 chờ yêu cầu xong mới thoát (≥ 2 s) và thoát mã 0
+C. Không còn bản api nào
+  ✓ proxy trả 502 problem+json có requestId
+  ✓ khởi động lại: readyz 200 qua proxy
+
+Đạt 6, lỗi 1.

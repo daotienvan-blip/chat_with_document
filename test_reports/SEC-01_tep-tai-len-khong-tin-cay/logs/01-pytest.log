@@ -1,0 +1,32 @@
+$ .venv/bin/pytest -o addopts= -p no:cacheprovider -p no:warnings -v -m "integration or not integration" tests/unit/test_core_units.py::test_upload_rejects_non_pdf tests/unit/test_core_units.py::test_upload_exact_limit_ok_one_byte_over_rejected tests/unit/test_core_units.py::test_sanitize_name tests/unit/test_adapters.py::test_pdf_extractor_cases tests/unit/test_adapters.py::test_pdf_extractor_crash_is_not_corrupt tests/integration/test_flows.py::test_ingestion_outcomes tests/integration/test_flows.py::test_ingestion_extractor_crash_is_processing_error --junitxml=/Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/SEC-01_tep-tai-len-khong-tin-cay/logs/01-junit.xml
+# thư mục: app/server
+# bắt đầu 2026-11-02T12:15:57.965Z · kết thúc 2026-11-02T12:16:00.466Z · mã thoát 0
+
+============================= test session starts ==============================
+platform darwin -- Python 3.12.16, pytest-9.1.1, pluggy-1.7.0 -- /Users/daotienvan/Desktop/SDLC/chat_with_document/app/server/.venv/bin/python3.12
+rootdir: /Users/daotienvan/Desktop/SDLC/chat_with_document/app/server
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.15.1
+collecting ... collected 18 items
+
+tests/unit/test_core_units.py::test_upload_rejects_non_pdf[%PDF-1.7\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-bao-cao.docx] PASSED [  5%]
+tests/unit/test_core_units.py::test_upload_rejects_non_pdf[MZ\x90\x00xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-gia.pdf] PASSED [ 11%]
+tests/unit/test_core_units.py::test_upload_rejects_non_pdf[-rong.pdf] PASSED [ 16%]
+tests/unit/test_core_units.py::test_upload_exact_limit_ok_one_byte_over_rejected PASSED [ 22%]
+tests/unit/test_core_units.py::test_sanitize_name[../../etc/passwd.pdf-passwd.pdf] PASSED [ 27%]
+tests/unit/test_core_units.py::test_sanitize_name[C:\\x\\h\u1ee3p \u0111\u1ed3ng.pdf-h\u1ee3p \u0111\u1ed3ng.pdf] PASSED [ 33%]
+tests/unit/test_core_units.py::test_sanitize_name[-tai-lieu.pdf] PASSED  [ 38%]
+tests/unit/test_core_units.py::test_sanitize_name[a\x00b.pdf-ab.pdf] PASSED [ 44%]
+tests/unit/test_adapters.py::test_pdf_extractor_cases PASSED             [ 50%]
+tests/unit/test_adapters.py::test_pdf_extractor_crash_is_not_corrupt[1-Traceback (most recent call last):\n  ...\nMemoryError\n-MemoryError] PASSED [ 55%]
+tests/unit/test_adapters.py::test_pdf_extractor_crash_is_not_corrupt[1-ImportError: lib.so: failed to map segment from shared object\n-ImportError] PASSED [ 61%]
+tests/unit/test_adapters.py::test_pdf_extractor_crash_is_not_corrupt[-9--SIGKILL] PASSED [ 66%]
+tests/unit/test_adapters.py::test_pdf_extractor_crash_is_not_corrupt[3-van ban tai lieu-exit3] PASSED [ 72%]
+tests/integration/test_flows.py::test_ingestion_outcomes[ready] PASSED   [ 77%]
+tests/integration/test_flows.py::test_ingestion_outcomes[corrupt] PASSED [ 83%]
+tests/integration/test_flows.py::test_ingestion_outcomes[encrypted] PASSED [ 88%]
+tests/integration/test_flows.py::test_ingestion_outcomes[image-only] PASSED [ 94%]
+tests/integration/test_flows.py::test_ingestion_extractor_crash_is_processing_error PASSED [100%]
+
+- generated xml file: /Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/SEC-01_tep-tai-len-khong-tin-cay/logs/01-junit.xml -
+============================== 18 passed in 2.01s ==============================

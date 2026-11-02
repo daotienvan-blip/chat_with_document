@@ -1,0 +1,79 @@
+$ npm audit --audit-level=high
+# thư mục: app/web
+# bắt đầu 2026-11-02T12:16:03.531Z · kết thúc 2026-11-02T12:16:04.798Z · mã thoát 1
+
+# npm audit report
+
+@vitest/mocker  <=4.1.11
+Severity: moderate
+Vitest: Path Traversal / Arbitrary File Read via @vitest/mocker Redirect Mock - https://github.com/advisories/GHSA-82fw-gwwq-j7x9
+Vitest: Code injection via unauthenticated manual mock registration - https://github.com/advisories/GHSA-qxg6-89mg-rqv8
+Depends on vulnerable versions of vite
+fix available via `npm audit fix --force`
+Will install vitest@5.0.5, which is a breaking change
+node_modules/@vitest/mocker
+  vitest  <=4.1.10
+  Depends on vulnerable versions of @vitest/mocker
+  Depends on vulnerable versions of tinypool
+  Depends on vulnerable versions of vite
+  Depends on vulnerable versions of vite-node
+  node_modules/vitest
+    @vitest/coverage-v8  <=3.2.7
+    Depends on vulnerable versions of test-exclude
+    Depends on vulnerable versions of vitest
+    node_modules/@vitest/coverage-v8
+
+esbuild  <=0.24.2
+Severity: moderate
+esbuild enables any website to send any requests to the development server and read the response - https://github.com/advisories/GHSA-67mh-4wv8-2f99
+fix available via `npm audit fix --force`
+Will install vite@8.3.5, which is a breaking change
+node_modules/esbuild
+  vite  <=6.4.3
+  Depends on vulnerable versions of esbuild
+  node_modules/vite
+    vite-node  <=2.2.0-beta.2
+    Depends on vulnerable versions of vite
+    node_modules/vite-node
+
+glob  3.0.0 - 14.0.1
+Severity: moderate
+Glob: AbortSignal cancellation bypass allows post-timeout filesystem traversal - https://github.com/advisories/GHSA-3g3m-2fjr-6pw4
+Depends on vulnerable versions of minimatch
+fix available via `npm audit fix --force`
+Will install @vitest/coverage-v8@5.0.5, which is a breaking change
+node_modules/glob
+  test-exclude  4.2.2 || >=5.0.0
+  Depends on vulnerable versions of glob
+  Depends on vulnerable versions of minimatch
+  node_modules/test-exclude
+
+minimatch  <11.0.1
+Severity: moderate
+minimatch has potential denial of service via globparts amplification - https://github.com/advisories/GHSA-g3hv-75wg-m249
+fix available via `npm audit fix --force`
+Will install @vitest/coverage-v8@5.0.5, which is a breaking change
+node_modules/glob/node_modules/minimatch
+node_modules/minimatch
+node_modules/test-exclude/node_modules/minimatch
+  @redocly/openapi-core  <=2.6.0
+  Depends on vulnerable versions of minimatch
+  node_modules/@redocly/openapi-core
+    openapi-typescript  >=7.0.0-next.0
+    Depends on vulnerable versions of @redocly/openapi-core
+    node_modules/openapi-typescript
+
+tinypool  <=2.1.1
+Severity: critical
+Tinypool: Prototype Pollution gadget in worker options leads to Remote Code Execution - https://github.com/advisories/GHSA-5gmw-xhrv-c9v3
+Tinypool: Prototype Pollution Gadget to RCE in run() options - https://github.com/advisories/GHSA-85c8-ppgw-ccpr
+fix available via `npm audit fix --force`
+Will install vitest@5.0.5, which is a breaking change
+node_modules/tinypool
+
+
+
+12 vulnerabilities (8 moderate, 1 high, 3 critical)
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force

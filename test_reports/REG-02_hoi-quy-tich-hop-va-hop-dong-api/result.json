@@ -1,0 +1,330 @@
+{
+  "id": "REG-02",
+  "title": "Hồi quy tích hợp và hợp đồng API",
+  "folder": "REG-02_hoi-quy-tich-hop-va-hop-dong-api",
+  "planRef": "docs/07-verification/test-plan.md §6.7",
+  "goal": "Tích hợp + hợp đồng API trên PostgreSQL thật: 100% đạt",
+  "mode": "Tự động – pytest `-m integration` trên PostgreSQL 17 + pgvector thật; S3 SeaweedFS của `make up`",
+  "startedAt": "2026-11-02T12:14:58.326Z",
+  "finishedAt": "2026-11-02T12:15:46.782Z",
+  "steps": [
+    {
+      "n": 1,
+      "title": "`test_schema_constraints` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.22 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "`test_upload_list_get` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.21 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "`test_upload_rejections` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.04 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "`test_upload_atomic_on_failures` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.04 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 5,
+      "title": "`test_job_queue_concurrency_and_backoff` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.03 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 6,
+      "title": "`test_ingestion_outcomes[ready]` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.17 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 7,
+      "title": "`test_ingestion_outcomes[corrupt]` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.15 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 8,
+      "title": "`test_ingestion_outcomes[encrypted]` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.20 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 9,
+      "title": "`test_ingestion_outcomes[image-only]` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.17 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 10,
+      "title": "`test_ingestion_extractor_crash_is_processing_error` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.04 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 11,
+      "title": "`test_ingestion_idempotent_and_deleted_midway` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.58 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 12,
+      "title": "`test_ingestion_ai_retry_then_terminal` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.61 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 13,
+      "title": "`test_ask_answered_with_sources` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.33 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 14,
+      "title": "`test_not_found_paths` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.19 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 15,
+      "title": "`test_multi_doc_sources` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.48 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 16,
+      "title": "`test_partial_requires_sources` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.18 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 17,
+      "title": "`test_question_validation` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.04 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 18,
+      "title": "`test_ai_errors_mapped` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.20 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 19,
+      "title": "`test_source_pages_match` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.21 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 20,
+      "title": "`test_file_endpoint` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.19 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 21,
+      "title": "`test_delete_is_immediate_everywhere` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.19 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 22,
+      "title": "`test_purge_order_and_race` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.27 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 23,
+      "title": "`test_race_deleted_between_retrieve_and_sources` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.19 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 24,
+      "title": "`test_busy_and_rate_limit` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.05 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 25,
+      "title": "`test_reconcile` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.18 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 26,
+      "title": "`test_observability_no_content_leak` (integration/test_flows)",
+      "expected": "Test đạt",
+      "actual": "passed (0.19 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 27,
+      "title": "`test_api_and_worker_privileges` (integration/test_privileges)",
+      "expected": "Test đạt",
+      "actual": "passed (0.04 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 28,
+      "title": "`test_readyz_queries_work_under_least_privilege` (integration/test_privileges)",
+      "expected": "Test đạt",
+      "actual": "passed (0.01 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 29,
+      "title": "`test_s3_store_roundtrip` (integration/test_s3_store)",
+      "expected": "Test đạt",
+      "actual": "passed (21.76 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    },
+    {
+      "n": 30,
+      "title": "`test_s3_store_unavailable_maps_to_domain_error` (integration/test_s3_store)",
+      "expected": "Test đạt",
+      "actual": "passed (0.01 s)",
+      "status": "Đạt",
+      "evidence": [
+        "logs/02-pytest.log"
+      ]
+    }
+  ],
+  "logs": [
+    "logs/01-setup.log",
+    "logs/02-pytest.log",
+    "logs/03-teardown.log"
+  ],
+  "notes": [
+    "Mọi phản hồi API trong các test tích hợp được kiểm theo `docs/04-design/openapi.yaml` (`tests/support/openapi_assert.py`)."
+  ],
+  "env": {
+    "URL ứng dụng": "—",
+    "Bản build": "`6014765` (`origin/main`); mã trong `app/` giống hệt `c6e849b` — commit `6014765` chỉ thêm `CLAUDE.md` và `test_reports/`; không có thay đổi chưa commit trong `app/`",
+    "Máy chạy": "macOS 27.2 (arm64), Python 3.12.16, PyMuPDF 1.28.2, Node v26.12.1",
+    "CSDL": "PostgreSQL 17.11 (Homebrew) + pgvector 0.8.7; stack Docker dùng ảnh `pgvector/pgvector:pg17`",
+    "Docker": "Colima, Docker 29.5.2",
+    "Trình duyệt": "Không dùng — test web chạy trên jsdom (vitest); dự án chưa có Playwright (S8-08)",
+    "Thư mục chạy": "app/server"
+  },
+  "verdict": "ĐẠT"
+}

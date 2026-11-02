@@ -1,0 +1,253 @@
+{
+  "id": "REG-04",
+  "title": "Proxy và nâng cấp cuốn chiếu",
+  "folder": "REG-04_proxy-va-nang-cap-cuon-chieu",
+  "planRef": "docs/07-verification/test-plan.md §6.7",
+  "goal": null,
+  "mode": "Tự động – `deploy/proxy/proxy-test.sh` và `deploy/prod-local/rolling-test.sh` trên stack `make prod-up`",
+  "startedAt": "2026-11-02T11:52:59.747Z",
+  "finishedAt": "2026-11-02T12:02:17.675Z",
+  "steps": [
+    {
+      "n": 1,
+      "title": "Proxy: TLS 1.2+ được chấp nhận",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "Proxy: TLS 1.1 bị từ chối",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "Proxy: CSP default-src 'self'; frame-ancestors 'none'",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Proxy: X-Content-Type-Options: nosniff",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 5,
+      "title": "Proxy: Referrer-Policy: no-referrer",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 6,
+      "title": "Proxy: Server không lộ phiên bản (Server: nginx)",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 7,
+      "title": "Proxy: không có CORS",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 8,
+      "title": "Proxy: X-Request-Id bị ghi đè (nhận: 1f896737a85939b791c5ee48c18df9bf)",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 9,
+      "title": "Proxy: 413 → problem+json FILE_TOO_LARGE có requestId",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 10,
+      "title": "Proxy: câu hỏi 100 KB → proxy trả 400 QUESTION_TOO_LONG problem+json",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 11,
+      "title": "Proxy: câu hỏi 5.000 ký tự → api trả QUESTION_TOO_LONG, limit 4000",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 12,
+      "title": "Proxy: 429 sau 6 yêu cầu → problem+json RATE_LIMITED, có Retry-After",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 13,
+      "title": "Proxy: thân 413/429/400 là JSON hợp lệ đủ trường bắt buộc",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 14,
+      "title": "Proxy: /metrics từ máy dev → 403",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 15,
+      "title": "Proxy: truy cập từ 100.64.10.0/24 (ngoài allowlist) → 403 (nhận: 403)",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-proxy-test.log"
+      ]
+    },
+    {
+      "n": 16,
+      "title": "Cuốn chiếu: trong lúc api-1 tắt: yêu cầu mới thành công 10/10",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-rolling-test.log"
+      ]
+    },
+    {
+      "n": 17,
+      "title": "Cuốn chiếu: yêu cầu đang chạy hoàn tất: HTTP 200, đúng sha256",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-rolling-test.log"
+      ]
+    },
+    {
+      "n": 18,
+      "title": "Cuốn chiếu: api-1 thoát mã 0",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-rolling-test.log"
+      ]
+    },
+    {
+      "n": 19,
+      "title": "Cuốn chiếu: yêu cầu đang chạy hoàn tất khi api-2 nhận SIGTERM",
+      "expected": "HTTP 200, đủ byte, đúng sha256",
+      "actual": "Client đọc chậm không nhận đủ phản hồi và không nhận được FIN: socket vẫn ESTABLISHED tới api-2 sau hơn 5 phút dù api-2 đã thoát mã 0. Agent phải dừng client; vì vậy log ghi 0 byte.",
+      "status": "Không đạt",
+      "evidence": [
+        "../_logs/reg04-rolling-test.log",
+        "../_logs/reg04-rolling-b-chan-doan.txt"
+      ]
+    },
+    {
+      "n": 20,
+      "title": "Cuốn chiếu: api-2 chờ yêu cầu xong mới thoát (≥ 2 s) và thoát mã 0",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-rolling-test.log"
+      ]
+    },
+    {
+      "n": 21,
+      "title": "Cuốn chiếu: proxy trả 502 problem+json có requestId",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-rolling-test.log"
+      ]
+    },
+    {
+      "n": 22,
+      "title": "Cuốn chiếu: khởi động lại: readyz 200 qua proxy",
+      "expected": "Kiểm tra đạt",
+      "actual": "✓",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg04-rolling-test.log"
+      ]
+    }
+  ],
+  "logs": [
+    "../_logs/reg04-prod-up.log",
+    "../_logs/reg04-proxy-test.log",
+    "../_logs/reg04-rolling-test.log",
+    "../_logs/reg04-rolling-b-chan-doan.txt"
+  ],
+  "notes": [
+    "**Lỗi mới DEF-004** (phần B của kiểm thử cuốn chiếu): xem README, mục Lỗi phát hiện.",
+    "Tệp mẫu cho kiểm thử cuốn chiếu là PDF 21 MB do agent sinh (7 trang, ảnh nhiễu để không nén được), tải lên rồi xóa sau khi chạy.",
+    "Kết quả lần trước (27/10) là 7/7. Lần này là lần chạy duy nhất, chưa biết lỗi có tái hiện ổn định không."
+  ],
+  "env": {
+    "URL ứng dụng": "https://localhost:8443 (stack prod cục bộ: api×2, worker, nginx TLS; ảnh build từ commit này)",
+    "Bản build": "`6014765` (`origin/main`); mã trong `app/` giống hệt `c6e849b` — commit `6014765` chỉ thêm `CLAUDE.md` và `test_reports/`; không có thay đổi chưa commit trong `app/`",
+    "Máy chạy": "macOS 27.2 (arm64), Python 3.12.16, PyMuPDF 1.28.2, Node v26.12.1",
+    "CSDL": "PostgreSQL 17.11 (Homebrew) + pgvector 0.8.7; stack Docker dùng ảnh `pgvector/pgvector:pg17`",
+    "Docker": "Colima, Docker 29.5.2",
+    "Trình duyệt": "Không dùng — test web chạy trên jsdom (vitest); dự án chưa có Playwright (S8-08)"
+  },
+  "verdict": "KHÔNG ĐẠT"
+}

@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="0.597" timestamp="2026-11-02T19:16:01.712090+07:00" hostname="Vans-MacBook-Pro.local"><testcase classname="tests.integration.test_flows" name="test_observability_no_content_leak" time="0.426" /></testsuite></testsuites>

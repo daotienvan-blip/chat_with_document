@@ -1,0 +1,118 @@
+::: commit c6e849b · 2026-11-02 18:49:31
+::: ruff
+All checks passed!
+::: PASS ruff (0s)
+::: mypy
+Success: no issues found in 46 source files
+::: PASS mypy (1s)
+::: import-linter
+
+╔══╗─────────▶╔╗ ╔╗      ╔╗◀───┐
+╚╣╠╝◀─────┐  ╔╝╚╗║║────▶╔╝╚╗   │
+ ║║   ╔══╦══╦╩╗╔╝║║  ╔╦═╩╗╔╝╔═╦══╗
+ ║║╔══╣╔╗║╔╗║╔╣║ ║║ ╔╬╣╔╗║║ ║│║╔═╝
+╔╣╠╣║║║╚╝║╚╝║║║╚╗║╚═╝║║║║║╚╗║═╣║
+╚══╩╩╩╣╔═╩══╩╝╚═╝╚═══╩╩╝╚╩═╩╩═╩╝
+  └──▶║║                    ▲ 
+      ╚╝────────────────────┘
+
+
+---------
+Contracts
+---------
+
+Analyzed 84 files, 211 dependencies.
+------------------------------------
+
+Lõi không phụ thuộc hạ tầng (Blueprint §3.3.1) KEPT
+Cổng không phụ thuộc gì ngoài lõi kiểu KEPT
+Chỉ adapter được dùng SDK ngoài KEPT
+
+Contracts: 3 kept, 0 broken.
+::: PASS import-linter (0s)
+::: pytest unit+tích hợp, coverage ≥ 70%
+............................ss.......................................... [ 86%]
+...........                                                              [100%]
+================================ tests coverage ================================
+______________ coverage: platform darwin, python 3.12.16-final-0 _______________
+
+Name                                           Stmts   Miss Branch BrPart  Cover   Missing
+------------------------------------------------------------------------------------------
+cwd_server/adapters/llm_http.py                   37      1      8      1    96%   20
+cwd_server/adapters/llm_local.py                 117      8     40      6    91%   64, 85, 107, 112, 132->139, 145, 151-153
+cwd_server/adapters/pymupdf_extractor.py          60     27     12      0    57%   25-49, 63-64, 81-82
+cwd_server/adapters/resilient_llm.py              76      7     12      1    91%   28, 47-48, 79-82
+cwd_server/adapters/s3_store.py                   41     21      6      0    43%   28-34, 37, 41, 44-46, 49, 52-55, 58-61
+cwd_server/adapters/stores.py                    109     47     30      2    55%   51, 65->64, 74-75, 78, 81-89, 92-97, 100-115, 118-121, 124-130, 133-134
+cwd_server/api/app.py                            160     16     32      6    88%   45, 47, 98, 100-101, 125, 137-138, 162, 197, 202-207
+cwd_server/api/problems.py                        40      8      8      0    75%   58-62, 66-68
+cwd_server/container.py                           55     12      8      0    68%   23-29, 33-38
+cwd_server/core/answer/service.py                 54      3     18      4    90%   33->39, 38, 40, 57, 58->62
+cwd_server/core/documents/service.py              63     10      8      0    86%   28-29, 39-40, 72-77
+cwd_server/core/documents/validate_upload.py      55      2     14      1    96%   34-35
+cwd_server/core/ingestion/chunker.py              21      1      8      1    93%   10
+cwd_server/core/ingestion/service.py              61     10     10      1    85%   45-49, 61-62, 72-73, 75
+cwd_server/core/retrieval/service.py              53      2     18      2    94%   21, 48
+cwd_server/persistence/db.py                      26      1      2      1    93%   34
+cwd_server/persistence/repositories.py            92      6     14      4    91%   95, 112-113, 124, 136, 185
+cwd_server/platform/config.py                     66      1      0      0    98%   83
+cwd_server/platform/logging.py                    35     22     12      0    28%   17-18, 21-33, 37-45, 49-52
+cwd_server/ports/__init__.py                       9      9      0      0     0%   2-34
+cwd_server/worker/__main__.py                     47     27     10      1    37%   24-27, 36-60, 64
+cwd_server/worker/maintenance.py                  57     11     16      3    78%   24, 26, 36-42, 65-66
+cwd_server/worker/runner.py                       67     13     20      2    74%   48, 52->56, 58-63, 79-84
+------------------------------------------------------------------------------------------
+TOTAL                                           1665    265    330     36    82%
+
+19 files skipped due to complete coverage.
+Coverage HTML written to dir ../var/ci/server-htmlcov
+Coverage XML written to file ../var/ci/server-coverage.xml
+Required test coverage of 70.0% reached. Total coverage: 81.50%
+81 passed, 2 skipped in 10.16s
+::: PASS pytest unit+tích hợp, coverage ≥ 70% (12s)
+::: tsc
+::: PASS tsc (2s)
+::: vitest + coverage ≥ 70%
+
+ RUN  v2.1.9 /Users/daotienvan/Desktop/SDLC/chat_with_document/app/web
+      Coverage enabled with v8
+
+ ✓ src/app/app.test.tsx (8 tests) 614ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  18:49:47
+   Duration  1.62s (transform 89ms, setup 60ms, collect 175ms, tests 614ms, environment 336ms, prepare 62ms)
+
+ % Coverage report from v8
+
+=============================== Coverage summary ===============================
+Statements   : 80.55% ( 518/643 )
+Branches     : 72.72% ( 168/231 )
+Functions    : 77.35% ( 41/53 )
+Lines        : 80.55% ( 518/643 )
+================================================================================
+::: PASS vitest + coverage ≥ 70% (2s)
+::: vite build
+::: PASS vite build (1s)
+::: gitleaks (lịch sử git)
+[90m6:49PM[0m [32mINF[0m [1m12 commits scanned.[0m
+[90m6:49PM[0m [32mINF[0m [1mscanned ~1603842 bytes (1.60 MB) in 278ms[0m
+[90m6:49PM[0m [32mINF[0m [1mno leaks found[0m
+::: PASS gitleaks (lịch sử git) (1s)
+::: docker build server
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+sha256:c3cd71a921d5bb7cd7f8ee4029be83f9c96014065d2c1b0ec0ce5c0eef9f01fb
+::: PASS docker build server (0s)
+::: docker build web
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+sha256:5e81e4feed3aee6281936f516e65c83e161b393a158ec7587a879d44ac80093c
+::: PASS docker build web (1s)
+::: tổng thời gian 20s (giới hạn 600s)
+::: L0 XANH

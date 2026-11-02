@@ -1,0 +1,16 @@
+$ .venv/bin/pytest -o addopts= -p no:cacheprovider -p no:warnings -v -m "integration or not integration" tests/integration/test_flows.py::test_upload_rejections tests/unit/test_core_units.py::test_upload_exact_limit_ok_one_byte_over_rejected --junitxml=/Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/API-02_tai-len-bi-tu-choi/logs/01-junit.xml
+# thư mục: app/server
+# bắt đầu 2026-11-02T12:15:48.157Z · kết thúc 2026-11-02T12:15:49.166Z · mã thoát 0
+
+============================= test session starts ==============================
+platform darwin -- Python 3.12.16, pytest-9.1.1, pluggy-1.7.0 -- /Users/daotienvan/Desktop/SDLC/chat_with_document/app/server/.venv/bin/python3.12
+rootdir: /Users/daotienvan/Desktop/SDLC/chat_with_document/app/server
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.15.1
+collecting ... collected 2 items
+
+tests/integration/test_flows.py::test_upload_rejections PASSED           [ 50%]
+tests/unit/test_core_units.py::test_upload_exact_limit_ok_one_byte_over_rejected PASSED [100%]
+
+- generated xml file: /Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/API-02_tai-len-bi-tu-choi/logs/01-junit.xml -
+============================== 2 passed in 0.52s ===============================

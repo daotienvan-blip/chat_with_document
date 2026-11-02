@@ -1,0 +1,19 @@
+$ .venv/bin/pytest -o addopts= -p no:cacheprovider -p no:warnings -v -m "integration or not integration" tests/unit/test_core_units.py::test_tsquery_safe tests/unit/test_core_units.py::test_prompt_marks_data_block --junitxml=/Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/SEC-02_chong-injection/logs/01-junit.xml
+# thư mục: app/server
+# bắt đầu 2026-11-02T12:16:00.467Z · kết thúc 2026-11-02T12:16:00.847Z · mã thoát 0
+
+============================= test session starts ==============================
+platform darwin -- Python 3.12.16, pytest-9.1.1, pluggy-1.7.0 -- /Users/daotienvan/Desktop/SDLC/chat_with_document/app/server/.venv/bin/python3.12
+rootdir: /Users/daotienvan/Desktop/SDLC/chat_with_document/app/server
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.15.1
+collecting ... collected 5 items
+
+tests/unit/test_core_units.py::test_tsquery_safe[\u0110i\u1ec1u kho\u1ea3n 'thanh to\xe1n' & ph\u1ea1t | ! : * ( )] PASSED [ 20%]
+tests/unit/test_core_units.py::test_tsquery_safe[] PASSED                [ 40%]
+tests/unit/test_core_units.py::test_tsquery_safe[???] PASSED             [ 60%]
+tests/unit/test_core_units.py::test_tsquery_safe[a_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b ca_b c] PASSED [ 80%]
+tests/unit/test_core_units.py::test_prompt_marks_data_block PASSED       [100%]
+
+- generated xml file: /Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/SEC-02_chong-injection/logs/01-junit.xml -
+============================== 5 passed in 0.02s ===============================

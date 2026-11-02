@@ -1,0 +1,272 @@
+docker-compose -p cwd-prod --project-directory .. --env-file var/prod-local/compose.env -f deploy/compose.prod.yaml -f deploy/compose.prod.local.yaml up -d --build --wait
+time="2026-11-02T18:52:12+07:00" level=warning msg="buildx Docker CLI plugin not found: falling back to the classic builder. BuildKit-only build features (multi-arch, secrets, ssh, additional contexts, ...) will not be available"
+ Image cwd-server:local Building 
+ Image cwd-server:local Building 
+Sending build context to Docker daemon  107.6kB
+Step 1/17 : FROM python:3.12-slim AS build
+ ---> 12316debbfb8
+Step 2/17 : WORKDIR /src
+ ---> Using cache
+ ---> 0a3ae61ca2f2
+Step 3/17 : COPY app/server/pyproject.toml ./
+ ---> Using cache
+ ---> c53f9c9037da
+Step 4/17 : COPY app/server/cwd_server ./cwd_server
+ ---> Using cache
+ ---> 57312d52cc82
+Step 5/17 : RUN pip install --no-cache-dir --prefix=/install '.[s3]'
+ ---> Using cache
+ ---> b5c97bcef2ae
+Step 6/17 : FROM python:3.12-slim
+ ---> 12316debbfb8
+Step 7/17 : RUN useradd --uid 10001 --create-home app
+ ---> Using cache
+ ---> 4c05a6928f1d
+Step 8/17 : COPY --from=build /install /usr/local
+ ---> Using cache
+ ---> 0740f04c9321
+Step 9/17 : WORKDIR /app/server
+ ---> Using cache
+ ---> 0b710a2e6000
+Step 10/17 : COPY app/server/cwd_server ./cwd_server
+ ---> Using cache
+ ---> 7b3ca14fe570
+Step 11/17 : COPY app/server/alembic.ini ./
+ ---> Using cache
+ ---> 7c7653097017
+Step 12/17 : COPY docs/04-design/schema.sql /app/docs/04-design/schema.sql
+ ---> Using cache
+ ---> e24ef129a959
+Step 13/17 : ENV SCHEMA_SQL=/app/docs/04-design/schema.sql WEB_DIST=/nonexistent PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
+ ---> Using cache
+ ---> 497ffee0af5c
+Step 14/17 : USER 10001
+ ---> Using cache
+ ---> b923f43fdb0f
+Step 15/17 : EXPOSE 8000
+ ---> Using cache
+ ---> b52726b73b57
+Step 16/17 : CMD ["uvicorn", "cwd_server.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--timeout-graceful-shutdown", "45"]
+ ---> Using cache
+ ---> c3cd71a921d5
+Step 17/17 : LABEL com.docker.compose.image.builder=classic
+ ---> Running in 49c37ddec5bd
+ ---> Removed intermediate container 49c37ddec5bd
+ ---> 355a9cce8ab9
+Successfully built 355a9cce8ab9
+Successfully tagged cwd-server:local
+ Image cwd-server:local Built 
+ Image cwd-server:local Built 
+ Image cwd-server:local Building 
+ Image cwd-server:local Building 
+ Image cwd-server:local Building 
+ Image cwd-server:local Building 
+Sending build context to Docker daemon  107.6kB
+Sending build context to Docker daemon  107.6kB
+Step 1/17 : FROM python:3.12-slim AS build
+Step 1/17 : FROM python:3.12-slim AS build
+ ---> 12316debbfb8
+Step 2/17 : WORKDIR /src
+ ---> 12316debbfb8
+Step 2/17 : WORKDIR /src
+ ---> Using cache
+ ---> 0a3ae61ca2f2
+Step 3/17 : COPY app/server/pyproject.toml ./
+ ---> Using cache
+ ---> 0a3ae61ca2f2
+Step 3/17 : COPY app/server/pyproject.toml ./
+ ---> Using cache
+ ---> c53f9c9037da
+Step 4/17 : COPY app/server/cwd_server ./cwd_server
+ ---> Using cache
+ ---> c53f9c9037da
+Step 4/17 : COPY app/server/cwd_server ./cwd_server
+ ---> Using cache
+ ---> 57312d52cc82
+Step 5/17 : RUN pip install --no-cache-dir --prefix=/install '.[s3]'
+ ---> Using cache
+ ---> 57312d52cc82
+Step 5/17 : RUN pip install --no-cache-dir --prefix=/install '.[s3]'
+ ---> Using cache
+ ---> b5c97bcef2ae
+Step 6/17 : FROM python:3.12-slim
+ ---> Using cache
+ ---> b5c97bcef2ae
+Step 6/17 : FROM python:3.12-slim
+ ---> 12316debbfb8
+Step 7/17 : RUN useradd --uid 10001 --create-home app
+ ---> 12316debbfb8
+Step 7/17 : RUN useradd --uid 10001 --create-home app
+ ---> Using cache
+ ---> 4c05a6928f1d
+Step 8/17 : COPY --from=build /install /usr/local
+ ---> Using cache
+ ---> 4c05a6928f1d
+Step 8/17 : COPY --from=build /install /usr/local
+ ---> Using cache
+ ---> Using cache
+ ---> 0740f04c9321
+Step 9/17 : WORKDIR /app/server
+ ---> 0740f04c9321
+Step 9/17 : WORKDIR /app/server
+ ---> Using cache
+ ---> 0b710a2e6000
+Step 10/17 : COPY app/server/cwd_server ./cwd_server
+ ---> Using cache
+ ---> 0b710a2e6000
+Step 10/17 : COPY app/server/cwd_server ./cwd_server
+ ---> Using cache
+ ---> 7b3ca14fe570
+Step 11/17 : COPY app/server/alembic.ini ./
+ ---> Using cache
+ ---> 7b3ca14fe570
+Step 11/17 : COPY app/server/alembic.ini ./
+ ---> Using cache
+ ---> 7c7653097017
+Step 12/17 : COPY docs/04-design/schema.sql /app/docs/04-design/schema.sql
+ ---> Using cache
+ ---> 7c7653097017
+Step 12/17 : COPY docs/04-design/schema.sql /app/docs/04-design/schema.sql
+ ---> Using cache
+ ---> e24ef129a959
+Step 13/17 : ENV SCHEMA_SQL=/app/docs/04-design/schema.sql WEB_DIST=/nonexistent PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
+ ---> Using cache
+ ---> e24ef129a959
+Step 13/17 : ENV SCHEMA_SQL=/app/docs/04-design/schema.sql WEB_DIST=/nonexistent PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
+ ---> Using cache
+ ---> 497ffee0af5c
+Step 14/17 : USER 10001
+ ---> Using cache
+ ---> 497ffee0af5c
+Step 14/17 : USER 10001
+ ---> Using cache
+ ---> b923f43fdb0f
+Step 15/17 : EXPOSE 8000
+ ---> Using cache
+ ---> b923f43fdb0f
+Step 15/17 : EXPOSE 8000
+ ---> Using cache
+ ---> b52726b73b57
+Step 16/17 : CMD ["uvicorn", "cwd_server.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--timeout-graceful-shutdown", "45"]
+ ---> Using cache
+ ---> b52726b73b57
+Step 16/17 : CMD ["uvicorn", "cwd_server.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--timeout-graceful-shutdown", "45"]
+ ---> Using cache
+ ---> c3cd71a921d5
+Step 17/17 : LABEL com.docker.compose.image.builder=classic
+ ---> Using cache
+ ---> c3cd71a921d5
+Step 17/17 : LABEL com.docker.compose.image.builder=classic
+ ---> Using cache
+ ---> 355a9cce8ab9
+ ---> Using cache
+ ---> 355a9cce8ab9
+Successfully built 355a9cce8ab9
+Successfully built 355a9cce8ab9
+Successfully tagged cwd-server:local
+ Image cwd-server:local Built 
+ Image cwd-server:local Built 
+Successfully tagged cwd-server:local
+ Image cwd-server:local Built 
+ Image cwd-server:local Built 
+ Image cwd-proxy:local Building 
+ Image cwd-proxy:local Building 
+Sending build context to Docker daemon  107.5kB
+Step 1/14 : FROM node:22-alpine AS build
+ ---> fe4f6d74e203
+Step 2/14 : WORKDIR /src
+ ---> Using cache
+ ---> 87b4f0f50f1c
+Step 3/14 : COPY app/web/package*.json ./
+ ---> Using cache
+ ---> 0ba257df89ee
+Step 4/14 : RUN npm ci --no-audit --no-fund
+ ---> Using cache
+ ---> fce3bd992eb7
+Step 5/14 : COPY app/web ./
+ ---> Using cache
+ ---> 15a97adfee4f
+Step 6/14 : COPY docs/04-design/openapi.yaml /docs/04-design/openapi.yaml
+ ---> Using cache
+ ---> cad68668bcbd
+Step 7/14 : RUN npm run build
+ ---> Using cache
+ ---> 19a03bf21cd5
+Step 8/14 : FROM nginxinc/nginx-unprivileged:1.27-alpine
+ ---> 65e3e85dbaed
+Step 9/14 : COPY --from=build /src/dist /usr/share/nginx/html
+ ---> Using cache
+ ---> ed6264e27327
+Step 10/14 : COPY app/deploy/proxy/nginx.conf /etc/nginx/nginx.conf
+ ---> Using cache
+ ---> adbc681c3a7d
+Step 11/14 : COPY app/deploy/proxy/proxy_common.conf /etc/nginx/proxy_common.conf
+ ---> Using cache
+ ---> 40f48c7b741c
+Step 12/14 : COPY app/deploy/proxy/allowlist.conf /etc/nginx/allowlist.conf
+ ---> Using cache
+ ---> 034b664a8661
+Step 13/14 : EXPOSE 8443
+ ---> Using cache
+ ---> 5e81e4feed3a
+Step 14/14 : LABEL com.docker.compose.image.builder=classic
+ ---> Using cache
+ ---> 0f84294b33e9
+Successfully built 0f84294b33e9
+Successfully tagged cwd-proxy:local
+ Image cwd-proxy:local Built 
+ Image cwd-proxy:local Built 
+ Container cwd-prod-proxy-1 Running 
+ Container cwd-prod-migrate-1 Recreate 
+ Container cwd-prod-migrate-1 Recreated 
+ Container cwd-prod-api-2 Recreate 
+ Container cwd-prod-api-1 Recreate 
+ Container cwd-prod-worker-1 Recreate 
+ Container cwd-prod-worker-1 Recreated 
+ Container cwd-prod-api-1 Recreated 
+ Container cwd-prod-api-2 Recreated 
+ Container cwd-prod-s3-1 Starting 
+ Container cwd-prod-db-1 Starting 
+ Container cwd-prod-s3-1 Started 
+ Container cwd-prod-s3-1 Waiting 
+ Container cwd-prod-db-1 Started 
+ Container cwd-prod-s3-1 Healthy 
+ Container cwd-prod-s3-init-1 Starting 
+ Container cwd-prod-s3-init-1 Started 
+ Container cwd-prod-s3-init-1 Waiting 
+ Container cwd-prod-db-1 Waiting 
+ Container cwd-prod-db-1 Healthy 
+ Container cwd-prod-s3-init-1 Exited 
+ Container cwd-prod-migrate-1 Starting 
+ Container cwd-prod-migrate-1 Started 
+ Container cwd-prod-migrate-1 Waiting 
+ Container cwd-prod-migrate-1 Waiting 
+ Container cwd-prod-migrate-1 Exited 
+ Container cwd-prod-migrate-1 Exited 
+ Container cwd-prod-worker-1 Starting 
+ Container cwd-prod-api-1 Starting 
+ Container cwd-prod-worker-1 Started 
+ Container cwd-prod-api-1 Started 
+ Container cwd-prod-api-2 Starting 
+ Container cwd-prod-api-2 Started 
+ Container cwd-prod-api-1 Waiting 
+ Container cwd-prod-api-2 Waiting 
+ Container cwd-prod-api-1 Healthy 
+ Container cwd-prod-api-2 Healthy 
+ Container cwd-prod-proxy-1 Waiting 
+ Container cwd-prod-db-1 Waiting 
+ Container cwd-prod-s3-1 Waiting 
+ Container cwd-prod-s3-init-1 Waiting 
+ Container cwd-prod-migrate-1 Waiting 
+ Container cwd-prod-api-1 Waiting 
+ Container cwd-prod-api-2 Waiting 
+ Container cwd-prod-worker-1 Waiting 
+ Container cwd-prod-worker-1 Healthy 
+ Container cwd-prod-migrate-1 Exited 
+ Container cwd-prod-db-1 Healthy 
+ Container cwd-prod-s3-1 Healthy 
+ Container cwd-prod-s3-init-1 Exited 
+ Container cwd-prod-proxy-1 Healthy 
+ Container cwd-prod-api-1 Healthy 
+ Container cwd-prod-api-2 Healthy 
+ok — https://localhost:8443

@@ -1,0 +1,12 @@
+$ git check-ignore -v app/.env app/var/prod-local/compose.env app/var/prod-local/app.env
+n=$(git check-ignore app/.env app/var/prod-local/compose.env app/var/prod-local/app.env | wc -l | tr -d ' ')
+t=$(git ls-files app/.env app/var | wc -l | tr -d ' ')
+echo "Tệp chứa bí mật bị gitignore: $n/3; đang được git theo dõi: $t"
+[[ $n == 3 && $t == 0 ]]
+# thư mục: .
+# bắt đầu 2026-11-02T12:13:59.072Z · kết thúc 2026-11-02T12:13:59.112Z · mã thoát 0
+
+app/.gitignore:1:.env	app/.env
+app/.gitignore:2:var/	app/var/prod-local/compose.env
+app/.gitignore:2:var/	app/var/prod-local/app.env
+Tệp chứa bí mật bị gitignore: 3/3; đang được git theo dõi: 0

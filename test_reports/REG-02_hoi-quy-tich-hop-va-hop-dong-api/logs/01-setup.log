@@ -1,0 +1,28 @@
+$ make up
+# thư mục: app
+# bắt đầu 2026-11-02T12:14:58.326Z · kết thúc 2026-11-02T12:15:08.151Z · mã thoát 0
+
+docker-compose -f deploy/compose.dev.yaml up -d --wait postgres s3
+ Network cwd-dev_default Creating 
+ Network cwd-dev_default Creating 
+ Network cwd-dev_default Created 
+ Network cwd-dev_default Created 
+ Container cwd-dev-s3-1 Creating 
+ Container cwd-dev-postgres-1 Creating 
+ Container cwd-dev-postgres-1 Created 
+ Container cwd-dev-s3-1 Created 
+ Container cwd-dev-postgres-1 Starting 
+ Container cwd-dev-s3-1 Starting 
+ Container cwd-dev-postgres-1 Started 
+ Container cwd-dev-s3-1 Started 
+ Container cwd-dev-postgres-1 Waiting 
+ Container cwd-dev-s3-1 Waiting 
+ Container cwd-dev-postgres-1 Healthy 
+ Container cwd-dev-s3-1 Healthy 
+docker-compose -f deploy/compose.dev.yaml run --rm s3-init
+ Container cwd-dev-s3-1 Running 
+ Container cwd-dev-s3-1 Waiting 
+ Container cwd-dev-s3-1 Healthy 
+ Container cwd-dev-s3-init-run-7b4c9cafa6d6 Creating 
+ Container cwd-dev-s3-init-run-7b4c9cafa6d6 Created 
+bucket cwd-documents: versioning + lifecycle 7 ngày

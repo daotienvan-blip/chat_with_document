@@ -1,0 +1,16 @@
+$ npx vitest run src/app/app.test.tsx --reporter=verbose --reporter=junit -t 'trạng thái có chữ|lỗi AI giữ câu hỏi' --outputFile.junit=/Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/ACC-06_thong-bao-loi-khong-chi-bang-mau/logs/01-junit.xml
+# thư mục: app/web
+# bắt đầu 2026-11-02T12:16:16.046Z · kết thúc 2026-11-02T12:16:17.537Z · mã thoát 0
+
+
+ RUN  v2.1.9 /Users/daotienvan/Desktop/SDLC/chat_with_document/app/web
+
+ ✓ src/app/app.test.tsx > [US-002-AC2][US-003-AC2] trạng thái có chữ, lý do lỗi và tài liệu chưa sẵn sàng
+ ✓ src/app/app.test.tsx > [EC-07] lỗi AI giữ câu hỏi, đếm ngược Retry-After rồi gửi lại
+
+ Test Files  1 passed (1)
+      Tests  2 passed | 6 skipped (8)
+   Start at  19:16:16
+   Duration  927ms (transform 77ms, setup 29ms, collect 135ms, tests 230ms, environment 166ms, prepare 37ms)
+
+JUNIT report written to /Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/ACC-06_thong-bao-loi-khong-chi-bang-mau/logs/01-junit.xml

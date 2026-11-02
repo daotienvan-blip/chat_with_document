@@ -1,0 +1,35 @@
+{
+  "id": "PERF-04",
+  "title": "Thời gian tài liệu sẵn sàng",
+  "folder": "PERF-04_thoi-gian-tai-lieu-san-sang",
+  "planRef": "docs/07-verification/test-plan.md §6.8",
+  "goal": null,
+  "mode": "Đo trong lượt REG-03; không có ngưỡng",
+  "startedAt": "2026-11-02T11:51:27.101Z",
+  "finishedAt": "2026-11-02T11:51:29.894Z",
+  "steps": [
+    {
+      "n": 1,
+      "title": "Đo `durationMs` của sự kiện `document_ready` (3 PDF mẫu, lượt REG-03)",
+      "expected": "≤ [TBD: OQ-P07]",
+      "actual": "Đo được: 280 ms (2 trang), 129 ms (1 trang), 137 ms (1 trang). Chưa có ngưỡng để so.",
+      "status": "Bị chặn",
+      "evidence": [
+        "../_logs/reg03-worker.log"
+      ]
+    }
+  ],
+  "logs": [
+    "../_logs/reg03-worker.log"
+  ],
+  "notes": [],
+  "env": {
+    "URL ứng dụng": "http://localhost:8010 — bản api + worker riêng cho lượt này: CSDL `cwd_smoke`, kho tệp riêng, `LLM_PROVIDER=extractive`",
+    "Bản build": "`6014765` (`origin/main`); mã trong `app/` giống hệt `c6e849b` — commit `6014765` chỉ thêm `CLAUDE.md` và `test_reports/`; không có thay đổi chưa commit trong `app/`",
+    "Máy chạy": "macOS 27.2 (arm64), Python 3.12.16, PyMuPDF 1.28.2, Node v26.12.1",
+    "CSDL": "PostgreSQL 17.11 (Homebrew) + pgvector 0.8.7; stack Docker dùng ảnh `pgvector/pgvector:pg17`",
+    "Docker": "Colima, Docker 29.5.2",
+    "Trình duyệt": "Không dùng — test web chạy trên jsdom (vitest); dự án chưa có Playwright (S8-08)"
+  },
+  "verdict": "BỊ CHẶN"
+}

@@ -1,0 +1,45 @@
+$ .venv/bin/pytest -o addopts= -p no:cacheprovider -p no:warnings -v -m integration --junitxml=/Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/REG-02_hoi-quy-tich-hop-va-hop-dong-api/logs/02-junit.xml
+# thư mục: app/server
+# bắt đầu 2026-11-02T12:15:08.152Z · kết thúc 2026-11-02T12:15:36.450Z · mã thoát 0
+
+============================= test session starts ==============================
+platform darwin -- Python 3.12.16, pytest-9.1.1, pluggy-1.7.0 -- /Users/daotienvan/Desktop/SDLC/chat_with_document/app/server/.venv/bin/python3.12
+rootdir: /Users/daotienvan/Desktop/SDLC/chat_with_document/app/server
+configfile: pyproject.toml
+testpaths: tests
+plugins: cov-7.1.0, anyio-4.15.1
+collecting ... collected 83 items / 53 deselected / 30 selected
+
+tests/integration/test_flows.py::test_schema_constraints PASSED          [  3%]
+tests/integration/test_flows.py::test_upload_list_get PASSED             [  6%]
+tests/integration/test_flows.py::test_upload_rejections PASSED           [ 10%]
+tests/integration/test_flows.py::test_upload_atomic_on_failures PASSED   [ 13%]
+tests/integration/test_flows.py::test_job_queue_concurrency_and_backoff PASSED [ 16%]
+tests/integration/test_flows.py::test_ingestion_outcomes[ready] PASSED   [ 20%]
+tests/integration/test_flows.py::test_ingestion_outcomes[corrupt] PASSED [ 23%]
+tests/integration/test_flows.py::test_ingestion_outcomes[encrypted] PASSED [ 26%]
+tests/integration/test_flows.py::test_ingestion_outcomes[image-only] PASSED [ 30%]
+tests/integration/test_flows.py::test_ingestion_extractor_crash_is_processing_error PASSED [ 33%]
+tests/integration/test_flows.py::test_ingestion_idempotent_and_deleted_midway PASSED [ 36%]
+tests/integration/test_flows.py::test_ingestion_ai_retry_then_terminal PASSED [ 40%]
+tests/integration/test_flows.py::test_ask_answered_with_sources PASSED   [ 43%]
+tests/integration/test_flows.py::test_not_found_paths PASSED             [ 46%]
+tests/integration/test_flows.py::test_multi_doc_sources PASSED           [ 50%]
+tests/integration/test_flows.py::test_partial_requires_sources PASSED    [ 53%]
+tests/integration/test_flows.py::test_question_validation PASSED         [ 56%]
+tests/integration/test_flows.py::test_ai_errors_mapped PASSED            [ 60%]
+tests/integration/test_flows.py::test_source_pages_match PASSED          [ 63%]
+tests/integration/test_flows.py::test_file_endpoint PASSED               [ 66%]
+tests/integration/test_flows.py::test_delete_is_immediate_everywhere PASSED [ 70%]
+tests/integration/test_flows.py::test_purge_order_and_race PASSED        [ 73%]
+tests/integration/test_flows.py::test_race_deleted_between_retrieve_and_sources PASSED [ 76%]
+tests/integration/test_flows.py::test_busy_and_rate_limit PASSED         [ 80%]
+tests/integration/test_flows.py::test_reconcile PASSED                   [ 83%]
+tests/integration/test_flows.py::test_observability_no_content_leak PASSED [ 86%]
+tests/integration/test_privileges.py::test_api_and_worker_privileges PASSED [ 90%]
+tests/integration/test_privileges.py::test_readyz_queries_work_under_least_privilege PASSED [ 93%]
+tests/integration/test_s3_store.py::test_s3_store_roundtrip PASSED       [ 96%]
+tests/integration/test_s3_store.py::test_s3_store_unavailable_maps_to_domain_error PASSED [100%]
+
+- generated xml file: /Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/REG-02_hoi-quy-tich-hop-va-hop-dong-api/logs/02-junit.xml -
+====================== 30 passed, 53 deselected in 27.53s ======================

@@ -1,0 +1,7 @@
+{"ts": "2026-11-02T11:51:19Z", "level": "info", "service": "worker", "requestId": null, "msg": "worker khởi động", "event": "start"}
+{"ts": "2026-11-02T11:51:19Z", "level": "info", "service": "worker", "requestId": null, "msg": "đối soát", "count": 0, "event": "reconcile"}
+{"ts": "2026-11-02T11:51:28Z", "level": "info", "service": "worker", "requestId": "0c62dcf28741", "msg": "tài liệu sẵn sàng", "pages": 2, "documentId": "b777b879-f1bd-4980-a31c-05bfdcc35f56", "count": 1, "durationMs": 280, "event": "document_ready"}
+{"ts": "2026-11-02T11:51:28Z", "level": "info", "service": "worker", "requestId": "05a1aa3ec9ee", "msg": "tài liệu sẵn sàng", "pages": 1, "documentId": "0bf2ef0d-feba-4454-ade2-f0c948c86f35", "count": 1, "durationMs": 129, "event": "document_ready"}
+{"ts": "2026-11-02T11:51:28Z", "level": "info", "service": "worker", "requestId": "fdf5578ce4d0", "msg": "tài liệu sẵn sàng", "pages": 1, "documentId": "edeeb27a-3ce8-4af5-8b06-9ab02656fc0d", "count": 1, "durationMs": 137, "event": "document_ready"}
+{"ts": "2026-11-02T11:51:29Z", "level": "info", "service": "worker", "requestId": "d545cc8d1690", "msg": "tài liệu lỗi", "errorCode": "FILE_ENCRYPTED", "documentId": "53c75836-2bfe-4210-a57d-348f36a1b771", "event": "document_failed"}
+{"ts": "2026-11-02T11:51:39Z", "level": "info", "service": "worker", "requestId": null, "msg": "dừng êm", "event": "shutdown"}

@@ -1,0 +1,182 @@
+{
+ "run": "https://github.com/daotienvan-blip/chat_with_document/actions/runs/41442350109",
+ "head_sha": "601476512ec17a6cda12f85eeb5bb8565aaec8aa",
+ "jobs": [
+  {
+   "name": "secret scan (gitleaks)",
+   "conclusion": "success",
+   "started_at": "2026-11-02T12:09:44Z",
+   "completed_at": "2026-11-02T12:09:50Z",
+   "steps": [
+    [
+     "Set up job",
+     "success"
+    ],
+    [
+     "Run actions/checkout@v4",
+     "success"
+    ],
+    [
+     "gitleaks (toàn bộ lịch sử)",
+     "success"
+    ],
+    [
+     "Post Run actions/checkout@v4",
+     "success"
+    ],
+    [
+     "Complete job",
+     "success"
+    ]
+   ]
+  },
+  {
+   "name": "server · lint + type + test + coverage",
+   "conclusion": "success",
+   "started_at": "2026-11-02T12:09:13Z",
+   "completed_at": "2026-11-02T12:10:09Z",
+   "steps": [
+    [
+     "Set up job",
+     "success"
+    ],
+    [
+     "Initialize containers",
+     "success"
+    ],
+    [
+     "Run actions/checkout@v4",
+     "success"
+    ],
+    [
+     "Run actions/setup-python@v5",
+     "success"
+    ],
+    [
+     "Run pip install -e '.[dev]'",
+     "success"
+    ],
+    [
+     "font tiếng Việt cho PDF test (tests/fixtures/pdfs.py)",
+     "success"
+    ],
+    [
+     "lint (ruff)",
+     "success"
+    ],
+    [
+     "type (mypy)",
+     "success"
+    ],
+    [
+     "hợp đồng phụ thuộc (import-linter)",
+     "success"
+    ],
+    [
+     "unit + tích hợp + coverage ≥ 70%",
+     "success"
+    ],
+    [
+     "Run actions/upload-artifact@v4",
+     "success"
+    ],
+    [
+     "Post Run actions/setup-python@v5",
+     "success"
+    ],
+    [
+     "Post Run actions/checkout@v4",
+     "success"
+    ],
+    [
+     "Stop containers",
+     "success"
+    ],
+    [
+     "Complete job",
+     "success"
+    ]
+   ]
+  },
+  {
+   "name": "web · type + test + coverage",
+   "conclusion": "success",
+   "started_at": "2026-11-02T12:09:23Z",
+   "completed_at": "2026-11-02T12:09:59Z",
+   "steps": [
+    [
+     "Set up job",
+     "success"
+    ],
+    [
+     "Run actions/checkout@v4",
+     "success"
+    ],
+    [
+     "Run actions/setup-node@v4",
+     "success"
+    ],
+    [
+     "Run npm ci --no-audit --no-fund",
+     "success"
+    ],
+    [
+     "type (tsc)",
+     "success"
+    ],
+    [
+     "test + coverage ≥ 70%",
+     "success"
+    ],
+    [
+     "build",
+     "success"
+    ],
+    [
+     "Post Run actions/setup-node@v4",
+     "success"
+    ],
+    [
+     "Post Run actions/checkout@v4",
+     "success"
+    ],
+    [
+     "Complete job",
+     "success"
+    ]
+   ]
+  },
+  {
+   "name": "build ảnh Docker",
+   "conclusion": "success",
+   "started_at": "2026-11-02T12:09:13Z",
+   "completed_at": "2026-11-02T12:09:53Z",
+   "steps": [
+    [
+     "Set up job",
+     "success"
+    ],
+    [
+     "Run actions/checkout@v4",
+     "success"
+    ],
+    [
+     "Run docker build -f app/deploy/Dockerfile.server -t cwd-server:ci .",
+     "success"
+    ],
+    [
+     "Run docker build -f app/deploy/Dockerfile.web -t cwd-web:ci .",
+     "success"
+    ],
+    [
+     "Post Run actions/checkout@v4",
+     "success"
+    ],
+    [
+     "Complete job",
+     "success"
+    ]
+   ]
+  }
+ ]
+}

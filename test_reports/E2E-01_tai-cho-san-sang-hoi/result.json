@@ -1,0 +1,93 @@
+{
+  "id": "E2E-01",
+  "title": "Tải, chờ sẵn sàng, hỏi",
+  "folder": "E2E-01_tai-cho-san-sang-hoi",
+  "planRef": "docs/07-verification/test-plan.md §6.5",
+  "goal": null,
+  "mode": "Bán tự động – `smoke.py` (HTTP) + test thành phần web; bước trình duyệt chưa chạy",
+  "startedAt": "2026-11-02T11:51:27.101Z",
+  "finishedAt": "2026-11-02T11:51:29.894Z",
+  "steps": [
+    {
+      "n": 1,
+      "title": "Tải hop-dong-A.pdf",
+      "expected": "202, trạng thái processing",
+      "actual": "tải lên hop-dong-A.pdf → 202 processing",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg03-smoke.log"
+      ]
+    },
+    {
+      "n": 2,
+      "title": "Chờ sẵn sàng",
+      "expected": "Trạng thái ready",
+      "actual": "hop-dong-A.pdf sẵn sàng (2 trang)",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg03-smoke.log"
+      ]
+    },
+    {
+      "n": 3,
+      "title": "Hỏi điều khoản thanh toán",
+      "expected": "answered",
+      "actual": "hỏi có căn cứ → answered",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg03-smoke.log"
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Kiểm tra nguồn",
+      "expected": "Nguồn hop-dong-A.pdf có trang 1",
+      "actual": "nguồn: hop-dong-A.pdf tr. [1, 2]",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg03-smoke.log"
+      ]
+    },
+    {
+      "n": 5,
+      "title": "Mở tài liệu nguồn",
+      "expected": "Trả nội dung theo Range",
+      "actual": "mở tài liệu nguồn (Range)",
+      "status": "Đạt",
+      "evidence": [
+        "../_logs/reg03-smoke.log"
+      ]
+    },
+    {
+      "n": 6,
+      "title": "Chip nguồn mở PDF đúng trang (test thành phần web, jsdom)",
+      "expected": "Đạt",
+      "actual": "`[US-006-AC1][US-007-AC1][US-008-AC1]` đạt ở REG-01",
+      "status": "Đạt",
+      "evidence": [
+        "../REG-01_hoi-quy-don-vi-server-va-web/logs/02-vitest.log"
+      ]
+    },
+    {
+      "n": 7,
+      "title": "Lặp lại trên trình duyệt thật",
+      "expected": "Câu trả lời có nguồn hop-dong-A.pdf trang 1; chip mở PDF đúng trang",
+      "actual": "Chưa chạy trên trình duyệt thật: dự án chưa có Playwright (S8-08). Cần người kiểm thử mở ứng dụng và xác nhận.",
+      "status": "Cần người xác nhận",
+      "evidence": []
+    }
+  ],
+  "logs": [
+    "../_logs/reg03-smoke.log"
+  ],
+  "notes": [],
+  "env": {
+    "URL ứng dụng": "http://localhost:8010 — bản api + worker riêng cho lượt này: CSDL `cwd_smoke`, kho tệp riêng, `LLM_PROVIDER=extractive`",
+    "Bản build": "`6014765` (`origin/main`); mã trong `app/` giống hệt `c6e849b` — commit `6014765` chỉ thêm `CLAUDE.md` và `test_reports/`; không có thay đổi chưa commit trong `app/`",
+    "Máy chạy": "macOS 27.2 (arm64), Python 3.12.16, PyMuPDF 1.28.2, Node v26.12.1",
+    "CSDL": "PostgreSQL 17.11 (Homebrew) + pgvector 0.8.7; stack Docker dùng ảnh `pgvector/pgvector:pg17`",
+    "Docker": "Colima, Docker 29.5.2",
+    "Trình duyệt": "Không dùng — test web chạy trên jsdom (vitest); dự án chưa có Playwright (S8-08)"
+  },
+  "verdict": "CẦN NGƯỜI XÁC NHẬN"
+}

@@ -1,0 +1,15 @@
+$ .venv/bin/pytest -o addopts= -p no:cacheprovider -p no:warnings -v -m "integration or not integration" tests/integration/test_privileges.py::test_readyz_queries_work_under_least_privilege --junitxml=/Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/API-11_readyz-voi-vai-tro-toi-thieu/logs/01-junit.xml
+# thư mục: app/server
+# bắt đầu 2026-11-02T12:15:57.469Z · kết thúc 2026-11-02T12:15:57.964Z · mã thoát 0
+
+============================= test session starts ==============================
+platform darwin -- Python 3.12.16, pytest-9.1.1, pluggy-1.7.0 -- /Users/daotienvan/Desktop/SDLC/chat_with_document/app/server/.venv/bin/python3.12
+rootdir: /Users/daotienvan/Desktop/SDLC/chat_with_document/app/server
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.15.1
+collecting ... collected 1 item
+
+tests/integration/test_privileges.py::test_readyz_queries_work_under_least_privilege PASSED [100%]
+
+- generated xml file: /Users/daotienvan/Desktop/SDLC/chat_with_document/test_reports/API-11_readyz-voi-vai-tro-toi-thieu/logs/01-junit.xml -
+============================== 1 passed in 0.12s ===============================

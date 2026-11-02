@@ -1,0 +1,5 @@
+$ /opt/homebrew/bin/python3.12 -m venv /private/tmp/claude-501/-Users-daotienvan-Desktop-SDLC/99a3e10e-aa09-4620-87c8-e6e6b9657549/scratchpad/pip-audit-venv && /private/tmp/claude-501/-Users-daotienvan-Desktop-SDLC/99a3e10e-aa09-4620-87c8-e6e6b9657549/scratchpad/pip-audit-venv/bin/pip install -q pip-audit && /private/tmp/claude-501/-Users-daotienvan-Desktop-SDLC/99a3e10e-aa09-4620-87c8-e6e6b9657549/scratchpad/pip-audit-venv/bin/pip-audit --version
+# thư mục: /private/tmp/claude-501/-Users-daotienvan-Desktop-SDLC/99a3e10e-aa09-4620-87c8-e6e6b9657549/scratchpad
+# bắt đầu 2026-11-02T12:16:05.454Z · kết thúc 2026-11-02T12:16:07.045Z · mã thoát 0
+
+pip-audit 2.10.1

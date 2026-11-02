@@ -1,0 +1,28 @@
+# REG-04 phần B — chẩn đoán client bị treo (2026-11-02)
+
+## 1. Log uvicorn của cwd-prod-api-2 (docker logs -t, lọc dòng khởi động/tắt)
+2026-11-02T11:52:23.074366672Z INFO:     Started server process [1]
+2026-11-02T11:52:23.074412130Z INFO:     Waiting for application startup.
+2026-11-02T11:52:23.074750591Z INFO:     Application startup complete.
+2026-11-02T11:54:55.353758813Z INFO:     Shutting down
+2026-11-02T11:54:55.456381138Z INFO:     Waiting for connections to close. (CTRL+C to force quit)
+2026-11-02T11:55:00.252545202Z INFO:     Waiting for application shutdown.
+2026-11-02T11:55:00.253060370Z INFO:     Finished server process [1]
+2026-11-02T12:02:13.377905974Z INFO:     Started server process [1]
+2026-11-02T12:02:13.377926265Z INFO:     Waiting for application startup.
+2026-11-02T12:02:13.378146599Z INFO:     Application startup complete.
+
+## 2. Thời điểm container (docker inspect lúc chẩn đoán, trước khi api-2 được khởi động lại)
+cwd-prod-api-2: StartedAt 2026-11-02T11:52:21.75151396Z, FinishedAt 2026-11-02T11:55:00.550127225Z, ExitCode 0
+client (angry_sammet, docker run --rm cwd-server:local python ... urllib đọc chậm): StartedAt 2026-11-02T11:54:51.336902488Z, vẫn chạy lúc chẩn đoán (~12:00Z)
+
+## 3. Socket TCP trong container client (/proc/net/tcp, giải mã; quan sát lúc chẩn đoán)
+172.19.0.5:38752 -> 172.19.0.3:8000 ESTABLISHED tx_queue 0 rx_queue 0
+
+## 4. Diễn giải (chưa kiểm chứng bằng thí nghiệm riêng)
+uvicorn nhận SIGTERM lúc 11:54:55.35, chờ kết nối đóng tới 11:55:00.25 rồi thoát mã 0, không hủy tác vụ nào:
+nó coi phản hồi đã ghi xong khoảng 9 s sau khi client bắt đầu tải, trong khi client đọc chậm (256 KB mỗi 0,15 s)
+cần khoảng 12 s cho 21 MB. Phần cuối phản hồi khi tiến trình thoát có lẽ vẫn nằm trong bộ đệm gửi (asyncio hoặc kernel).
+Khi container dừng, network namespace của nó bị gỡ nên phần dữ liệu còn lại và FIN không tới client;
+client không có timeout đọc nên chờ vô hạn (socket ESTABLISHED, rx_queue 0).
+Agent dừng client bằng 'docker kill angry_sammet' để script chạy tiếp phần C; vì vậy log ghi 'client nhận  byte'.
