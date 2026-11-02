@@ -1,0 +1,26 @@
+server/.venv/bin/python server/scripts/trace_check.py
+US-001-AC1   ✓ test_flows.py
+US-001-AC2   ✓ test_core_units.py, test_flows.py
+US-001-AC3   ✓ app.test.tsx, test_core_units.py, test_flows.py
+US-002-AC1   ✓ test_flows.py
+US-002-AC2   ✓ app.test.tsx, test_flows.py
+US-003-AC1   ✓ test_adapters.py, test_flows.py
+US-003-AC2   ✓ app.test.tsx, test_adapters.py, test_flows.py
+US-003-AC3   ✓ test_adapters.py, test_flows.py
+US-003-AC4   ✓ test_flows.py
+US-004-AC1   ✓ test_flows.py
+US-005-AC1   ✓ app.test.tsx, test_flows.py
+US-005-AC2   ✓ test_flows.py
+US-006-AC1   ✓ app.test.tsx, test_flows.py
+US-006-AC2   ✓ app.test.tsx
+US-006-AC3   ✓ test_core_units.py
+US-007-AC1   ✓ app.test.tsx, test_flows.py
+US-007-AC2   ✓ test_flows.py
+US-008-AC1   ✓ app.test.tsx, test_flows.py
+US-009-AC1   ✓ test_flows.py
+US-009-AC2   ✓ test_core_units.py
+US-010-AC1   ✓ app.test.tsx, test_adapters.py, test_core_units.py, test_flows.py
+US-010-AC2   ✓ app.test.tsx, test_flows.py
+US-015-AC1   — phê duyệt vị trí lưu trữ (deploy/DATA_LOCATION.md, chờ OQ-005)
+
+22/23 AC có test; 1 AC chỉ có bằng chứng ngoài mã.
