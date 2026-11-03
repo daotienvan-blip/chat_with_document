@@ -1,0 +1,30 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I \"$CLAUDE_PROJECT_DIR/.claude/hooks/cleanup-merged-branches.py\" --hook",
+            "timeout": 30,
+            "statusMessage": "Dọn nhánh đã merge vào main"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I \"$CLAUDE_PROJECT_DIR/.claude/hooks/cleanup-merged-branches.py\" --hook",
+            "timeout": 30,
+            "statusMessage": "Dọn nhánh đã merge vào main"
+          }
+        ]
+      }
+    ]
+  }
+}
